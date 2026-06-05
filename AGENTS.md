@@ -67,6 +67,8 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 - **Images:** next-cloudinary (uploads) + public assets (static)
 - **UI feedback:** sonner
 - **Icons:** react-icons
+- **API docs:** swagger-jsdoc + swagger-ui-react (served at `/docs`)
+- **Testing:** Jest + ts-jest
 - **Linting:** ESLint 9 (flat config)
 - **Formatting:** Prettier + prettier-plugin-tailwindcss
 - **Git hooks:** Husky + lint-staged
@@ -77,10 +79,21 @@ Reference `package.json` for exact versions. Always consult `node_modules/next/d
 
 ```
 app/
-├── layout.tsx                        # Root layout
+├── layout.tsx                        # Root layout (QueryProvider + Toaster)
 ├── globals.css
 ├── page.tsx                          # Redirects to /orders
 ├── not-found.tsx
+├── api/
+│   ├── categories/route.ts           # GET /api/categories
+│   ├── products/
+│   │   ├── route.ts                  # GET, POST /api/products
+│   │   └── [productId]/route.ts      # GET, PUT, DELETE /api/products/:id
+│   ├── orders/
+│   │   ├── route.ts                  # GET, POST /api/orders
+│   │   └── [orderId]/route.ts        # PATCH /api/orders/:id
+│   └── docs/route.ts                 # GET /api/docs — OpenAPI JSON spec
+├── docs/
+│   └── page.tsx                      # Swagger UI at /docs
 ├── order/
 │   └── page.tsx                      # New order — category sidebar + search + item list
 ├── orders/
@@ -104,20 +117,37 @@ components/
 
 prisma/
 ├── schema.prisma
+├── seed.ts                           # Seed script — run with yarn seed
 └── migrations/
 
 src/
-├── constants/
+├── constants/                        # App-wide constants
 ├── hooks/                            # Custom React hooks
+│   ├── useCategories.ts
+│   ├── useProducts.ts
+│   ├── useOrders.ts
+│   ├── useProductMutations.ts
+│   └── useOrderMutations.ts
 ├── lib/
-│   ├── schemas/
+│   ├── prisma.ts                     # Prisma client singleton
+│   ├── swagger.ts                    # OpenAPI spec definition
+│   ├── schemas/                      # Zod schemas (one file per domain)
+│   │   ├── categorySchema.ts
+│   │   ├── productSchema.ts
+│   │   └── orderSchema.ts
 │   └── utils/
-├── providers/                        # React context / TanStack Query provider
-├── stores/                           # Zustand stores
+│       ├── formatCurrency.ts
+│       └── getImagePath.ts
+├── providers/
+│   └── query.provider.tsx            # TanStack Query client provider
+├── store/
+│   └── orderStore.ts                 # Zustand cart store
 └── types/
-    └── index.ts                      # Re-exports all inferred Zod types
+    └── index.ts                      # Zod-inferred + API response types
 
 public/
+└── products/                         # Static product images
+
 .env
 .env.example
 ```
@@ -151,7 +181,7 @@ Mutations and queries use TanStack Query. Keys are domain strings (e.g. `["produ
 Use Zustand only for client-side state that doesn't belong in the server (e.g. current order items while building an order). Server state lives in TanStack Query.
 
 **Zod schemas drive types**
-Define schemas in `lib/schemas/`, infer types with `z.infer<>`, re-export from `types/index.ts`. No manual type duplication.
+Define schemas in `src/lib/schemas/`, infer types with `z.infer<>`, re-export from `src/types/index.ts`. No manual type duplication.
 
 **Cloudinary for uploaded images, public/ for static assets**
 Product images uploaded by the user go through next-cloudinary. Category icons or decoration images are static files in `public/`.
@@ -174,6 +204,8 @@ Never add `NEXT_PUBLIC_` to Cloudinary API key or secret.
 yarn dev          # Start dev server at http://localhost:3000
 yarn build        # Build for production
 yarn start        # Run production server
+yarn seed         # Seed the database with categories and products
+yarn test         # Run Jest test suite
 yarn lint         # ESLint (reports only)
 yarn format       # Prettier + Tailwind class sorting
 yarn typecheck    # Type-check without building
@@ -189,7 +221,7 @@ yarn prepare      # Set up Husky git hooks
 **TypeScript**
 
 - Strict mode enabled
-- Use `@/*` path alias for all imports
+- Path alias `@/*` maps to the project root. Files inside `src/` are imported with the `@/src/` prefix (e.g. `@/src/lib/prisma`, `@/src/hooks/useProducts`). Files inside `app/` use `@/app/` as usual.
 - `.tsx` for files with JSX, `.ts` for logic-only files
 - Import types with `import type` when the import is type-only
 - Derive union types from constant objects with `keyof typeof`
@@ -198,6 +230,7 @@ yarn prepare      # Set up Husky git hooks
 
 - Tailwind CSS utility-first; avoid custom CSS
 - Dynamic colors must use `style={{ ... }}` — never interpolate values into Tailwind class strings
+- Mobile-first: style for small screens first, add `sm:` / `md:` / `lg:` breakpoints to scale up. The app is primarily desktop but must look and function correctly on mobile.
 
 **React Patterns**
 
@@ -210,7 +243,7 @@ yarn prepare      # Set up Husky git hooks
 
 - react-hook-form for all form state
 - Zod schemas for validation via `@hookform/resolvers/zod`
-- Schemas colocated in `lib/schemas/`
+- Schemas colocated in `src/lib/schemas/`
 
 **Toast Notifications**
 
@@ -234,4 +267,6 @@ yarn prepare      # Set up Husky git hooks
 6. **Do not introduce new dependencies without asking.**
 7. **Always run `yarn validate` before considering a task done.**
 8. **Fix any errors introduced before responding.** Do not hand back broken code.
-9. **Never import `lib/prisma.ts` in a Client Component.** Database access is server-only.
+9. **Never import `src/lib/prisma.ts` in a Client Component.** Database access is server-only via Route Handlers.
+10. **Add Swagger JSDoc comments to every new Route Handler.** Follow the existing pattern in `app/api/`.
+11. **Tests go in `__tests__/` and match the pattern `*.test.ts`.** Write tests for utils and API handlers when truly necessary.
