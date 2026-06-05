@@ -12,6 +12,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "validate": "yarn lint && yarn typecheck && yarn build",
+    "seed": "tsx prisma/seed.ts",
     "prepare": "husky"
   },
   "dependencies": {
