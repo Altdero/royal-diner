@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "validate": "yarn lint && yarn typecheck && yarn build",
+    "validate": "yarn lint && yarn typecheck && yarn test && yarn build",
     "seed": "tsx prisma/seed.ts",
     "prepare": "husky"
   },
