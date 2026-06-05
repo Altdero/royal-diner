@@ -1,5 +1,237 @@
 <!-- BEGIN:nextjs-agent-rules -->
+
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+
 <!-- END:nextjs-agent-rules -->
+
+## Project
+
+Royal Diner is a diner order management system with four modules described below.
+
+---
+
+### Module 1 — Order (`/order`)
+
+The waiter uses this page to build and submit a new customer order.
+
+**Layout:**
+
+- **Left sidebar** — category list; clicking a category filters the product grid in the central panel
+- **Central panel** — search input at the top filters products by name; below it a product grid shows the available items the waiter can add to the order
+- **Right panel / summary** — shows the current order being built: customer name field, itemized breakdown (each line: product image, product name, quantity, subtotal), and the order total at the bottom; a submit button sends the order
+
+**Data written:** creates one `Order` + one `OrderItem` per product added.
+
+---
+
+### Module 2 — Orders Listing (`/orders`)
+
+Displays two side-by-side panels for the front-of-house staff to track order progress.
+
+**To Prepare panel** — orders with status `PENDING`
+**Ready panel** — orders with status `READY`
+
+Each order card shows:
+
+- Client name
+- Order number
+- List of items in the order with the quantity of each
+
+---
+
+### Module 3 — Kitchen (`/kitchen`)
+
+The kitchen display. Shows one card per order that has status `PENDING`. Each card gives the kitchen staff everything they need to prepare the order: the order number, client name, and the full item list with quantities. The kitchen can mark an order as ready from this view, which moves it to the Ready panel in the Orders Listing.
+
+---
+
+### Module 4 — Products (`/products`, `/products/new`, `/products/[productId]/edit`)
+
+**Catalog page (`/products`):** table/list of all products with columns: name, unit price, category, and an edit link.
+
+**Add product (`/products/new`) and Edit product (`/products/[productId]/edit`):** share the same form fields — name, unit price, category (select from existing categories), and image (uploaded via Cloudinary or chosen from public assets).
+
+---
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5 (strict)
+- **Styling:** Tailwind CSS 4
+- **Package manager:** yarn
+- **Database:** PostgreSQL on Neon via Prisma 7
+- **Data fetching:** TanStack Query v5
+- **Forms:** react-hook-form + @hookform/resolvers + Zod v4
+- **State:** Zustand v5
+- **Images:** next-cloudinary (uploads) + public assets (static)
+- **UI feedback:** sonner
+- **Icons:** react-icons
+- **Linting:** ESLint 9 (flat config)
+- **Formatting:** Prettier + prettier-plugin-tailwindcss
+- **Git hooks:** Husky + lint-staged
+
+Reference `package.json` for exact versions. Always consult `node_modules/next/dist/docs/` before implementing features.
+
+## Project Structure
+
+```
+app/
+├── layout.tsx                        # Root layout
+├── globals.css
+├── page.tsx                          # Redirects to /orders
+├── not-found.tsx
+├── order/
+│   └── page.tsx                      # New order — category sidebar + search + item list
+├── orders/
+│   └── page.tsx                      # Orders listing — to-prepare panel + ready panel
+├── kitchen/
+│   └── page.tsx                      # Kitchen view — one card per pending order
+└── products/
+    ├── page.tsx                      # Product catalog
+    ├── new/
+    │   └── page.tsx                  # Add product form
+    └── [productId]/
+        └── edit/
+            └── page.tsx              # Edit product form
+
+components/
+├── ui/                               # Shared UI primitives
+├── order/                            # Order module components
+├── orders/                           # Orders listing components
+├── kitchen/                          # Kitchen components
+└── products/                         # Product catalog and form components
+
+prisma/
+├── schema.prisma
+└── migrations/
+
+src/
+├── constants/
+├── hooks/                            # Custom React hooks
+├── lib/
+│   ├── schemas/
+│   └── utils/
+├── providers/                        # React context / TanStack Query provider
+├── stores/                           # Zustand stores
+└── types/
+    └── index.ts                      # Re-exports all inferred Zod types
+
+public/
+.env
+.env.example
+```
+
+## Naming Conventions
+
+| Thing      | Convention                    | Example              |
+| ---------- | ----------------------------- | -------------------- |
+| Components | PascalCase                    | `ProductCard.tsx`    |
+| Hooks      | camelCase prefixed `use`      | `useProducts.ts`     |
+| Providers  | camelCase + `Provider` suffix | `query.provider.tsx` |
+| Schemas    | camelCase + `Schema` suffix   | `productSchema.ts`   |
+| Stores     | camelCase + `Store` suffix    | `orderStore.ts`      |
+| Types      | PascalCase + `Type` suffix    | `OrderStatusType`    |
+| Constants  | SCREAMING_SNAKE_CASE          | `ORDER_STATUSES`     |
+| Util files | camelCase                     | `formatCurrency.ts`  |
+
+## Data Model
+
+Four Prisma models: `Category`, `Product`, `Order`, `OrderItem`. `OrderStatus` enum: `PENDING` | `READY`. See `prisma/schema.prisma` for the full schema.
+
+## Architectural Decisions
+
+**Full-stack Next.js — API routes + Prisma**
+All database access goes through Next.js Route Handlers (`app/*/route.ts`). Never import `lib/prisma.ts` inside a Client Component.
+
+**TanStack Query for all client-side data fetching**
+Mutations and queries use TanStack Query. Keys are domain strings (e.g. `["products"]`, `["orders", "pending"]`). Provide the `QueryClient` via a single provider in `app/layout.tsx`.
+
+**Zustand for ephemeral UI state**
+Use Zustand only for client-side state that doesn't belong in the server (e.g. current order items while building an order). Server state lives in TanStack Query.
+
+**Zod schemas drive types**
+Define schemas in `lib/schemas/`, infer types with `z.infer<>`, re-export from `types/index.ts`. No manual type duplication.
+
+**Cloudinary for uploaded images, public/ for static assets**
+Product images uploaded by the user go through next-cloudinary. Category icons or decoration images are static files in `public/`.
+
+## Environment Variables
+
+```
+DATABASE_URL=                         # Neon pooled connection string — used by the app at runtime
+DIRECT_URL=                           # Neon direct (non-pooled) connection string — used by Prisma CLI for migrations
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=    # Safe to expose — embedded in every Cloudinary URL
+```
+
+`DATABASE_URL` points to the Neon **pooler** endpoint (e.g. `*-pooler.*.neon.tech`).
+`DIRECT_URL` points to the Neon **direct** endpoint (no `-pooler`). Required by `prisma migrate`.
+Never add `NEXT_PUBLIC_` to Cloudinary API key or secret.
+
+## Development Workflow
+
+```bash
+yarn dev          # Start dev server at http://localhost:3000
+yarn build        # Build for production
+yarn start        # Run production server
+yarn lint         # ESLint (reports only)
+yarn format       # Prettier + Tailwind class sorting
+yarn typecheck    # Type-check without building
+yarn validate     # lint + typecheck + build
+yarn prepare      # Set up Husky git hooks
+```
+
+**Pre-commit:** Husky runs lint-staged — catches ESLint violations and formatting issues.
+**Pre-push:** Husky runs `yarn validate` — ensures lint, typecheck, and build all pass.
+
+## Coding Conventions
+
+**TypeScript**
+
+- Strict mode enabled
+- Use `@/*` path alias for all imports
+- `.tsx` for files with JSX, `.ts` for logic-only files
+- Import types with `import type` when the import is type-only
+- Derive union types from constant objects with `keyof typeof`
+
+**Styling**
+
+- Tailwind CSS utility-first; avoid custom CSS
+- Dynamic colors must use `style={{ ... }}` — never interpolate values into Tailwind class strings
+
+**React Patterns**
+
+- Server Components by default; add `"use client"` only when necessary
+- Push `"use client"` to the leaves — pages and layouts stay as Server Components; extract only interactive parts into Client Components under `components/`
+- Never call `setState` synchronously inside a `useEffect` body
+- Never call `router.push/replace` during render — use event handlers or `useEffect`
+
+**Forms**
+
+- react-hook-form for all form state
+- Zod schemas for validation via `@hookform/resolvers/zod`
+- Schemas colocated in `lib/schemas/`
+
+**Toast Notifications**
+
+- Sonner for all user-facing feedback
+- `toast.error()` for API failures
+- Call inside event handlers or `useEffect` — never during render
+
+**ESLint / Prettier**
+
+- Flat config (ESLint v9+)
+- `yarn lint` to check, `yarn format` to auto-fix
+- Husky runs lint-staged on `git commit`, `yarn validate` on `git push`
+
+## Rules for Agents
+
+1. **Read `AGENTS.md` first.** Do not assume conventions from training data.
+2. **Read the relevant files before editing them.** Never modify based only on prompt context.
+3. **Never create files outside the established structure.** Ask first if a new directory seems necessary.
+4. **Follow naming conventions exactly.**
+5. **Do not add `"use client"` without justification.** Server Components are the default.
+6. **Do not introduce new dependencies without asking.**
+7. **Always run `yarn validate` before considering a task done.**
+8. **Fix any errors introduced before responding.** Do not hand back broken code.
+9. **Never import `lib/prisma.ts` in a Client Component.** Database access is server-only.
