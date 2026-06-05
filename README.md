@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Royal Diner
 
-## Getting Started
+A diner order management system built with Next.js 16, React 19, and PostgreSQL.
 
-First, run the development server:
+## Modules
+
+| Module   | Route       | Description                                    |
+| -------- | ----------- | ---------------------------------------------- |
+| Order    | `/order`    | Waiter builds and submits a new customer order |
+| Orders   | `/orders`   | Front-of-house tracks pending and ready orders |
+| Kitchen  | `/kitchen`  | Kitchen display — mark orders as ready         |
+| Products | `/products` | Manage the menu catalog                        |
+
+## Stack
+
+- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5 (strict)
+- **Styling:** Tailwind CSS 4
+- **Database:** PostgreSQL on Neon via Prisma 7
+- **Data fetching:** TanStack Query v5
+- **Forms:** react-hook-form + Zod v4
+- **State:** Zustand v5
+- **Images:** next-cloudinary + public assets
+- **API docs:** swagger-jsdoc + swagger-ui-react
+- **Testing:** Jest + ts-jest
+- **Package manager:** yarn
+
+## Setup
+
+### 1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Fill in `.env`:
 
-## Learn More
+```
+DATABASE_URL=       # Neon pooled connection string
+DIRECT_URL=         # Neon direct connection string (for migrations)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Run database migrations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+yarn prisma migrate dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Seed the database
 
-## Deploy on Vercel
+```bash
+yarn seed
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Also copy the product images into `public/products/` — see the image mapping in `prisma/seed.ts` for the expected filenames.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. Start the dev server
+
+```bash
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## API Docs
+
+Interactive Swagger UI available at [http://localhost:3000/docs](http://localhost:3000/docs).
+
+## Scripts
+
+```bash
+yarn dev          # Start dev server
+yarn build        # Build for production
+yarn start        # Run production server
+yarn seed         # Seed the database
+yarn test         # Run tests
+yarn lint         # ESLint
+yarn format       # Prettier
+yarn typecheck    # Type-check without building
+yarn validate     # lint + typecheck + build
+```
