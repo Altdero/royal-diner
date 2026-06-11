@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Nav } from "@/components/Nav";
 import { QueryProvider } from "@/src/providers/query.provider";
 
 const geistSans = Geist({
@@ -29,8 +30,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-slate-100">
+      <body className="mx-auto flex min-h-full w-full max-w-7xl flex-col bg-slate-100">
         <QueryProvider>
+          <Nav />
           {children}
           <Toaster richColors position="top-right" />
         </QueryProvider>
