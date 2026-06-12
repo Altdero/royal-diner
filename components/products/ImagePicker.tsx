@@ -17,7 +17,7 @@ export function ImagePicker({ value, onChange }: ImagePickerProps) {
       <span className="text-sm font-medium text-stone-700">Image</span>
 
       <CldUploadWidget
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? ""}
+        uploadPreset="royal_diner"
         onSuccess={(result) => {
           if (
             result.info &&

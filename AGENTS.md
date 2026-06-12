@@ -64,7 +64,7 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 - **Data fetching:** TanStack Query v5
 - **Forms:** react-hook-form + @hookform/resolvers + Zod v4
 - **State:** Zustand v5
-- **Images:** next-cloudinary (uploads) + public assets (static)
+- **Images:** next-cloudinary (CldUploadWidget, preset hardcoded) + public assets (fallbacks)
 - **UI feedback:** sonner
 - **Icons:** react-icons
 - **API docs:** swagger-jsdoc + swagger-ui-react (served at `/docs`)
@@ -188,6 +188,8 @@ When a Server Component already loads a complete, bounded dataset (e.g. the prod
 
 **Cloudinary for uploaded images, public/ for fallbacks**
 Product images are uploaded by the user via next-cloudinary (CldUploadWidget). Images in `public/products/` are default fallbacks rendered by `getImagePath` when a product has no Cloudinary URL — they are not selectable from the UI. Category icons or decoration images are static files in `public/`.
+
+The upload preset is hardcoded in `ImagePicker.tsx`. `ImagePicker` is imported directly (no dynamic import needed).
 
 ## Environment Variables
 

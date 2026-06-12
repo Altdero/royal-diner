@@ -7,17 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-
-// CldUploadWidget validates the upload preset at module evaluation time. During
-// Next.js prerendering this runs server-side where the env var is absent, causing
-// a build-time throw. ssr:false defers the import to the client where it is set.
-const ImagePicker = dynamic(
-  () => import("@/components/products/ImagePicker").then((m) => m.ImagePicker),
-  { ssr: false }
-);
+import { ImagePicker } from "@/components/products/ImagePicker";
 import { useCategories } from "@/src/hooks/useCategories";
 import { useProduct } from "@/src/hooks/useProducts";
 import {
