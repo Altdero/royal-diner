@@ -51,7 +51,7 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 
 **Catalog page (`/products`):** table/list of all products with columns: name, unit price, category, and an edit link.
 
-**Add product (`/products/new`) and Edit product (`/products/[productId]/edit`):** share the same form fields — name, unit price, category (select from existing categories), and image (uploaded via Cloudinary or chosen from public assets).
+**Add product (`/products/new`) and Edit product (`/products/[productId]/edit`):** share the same form fields — name, unit price, category (select from existing categories), and image (uploaded via Cloudinary). Images in `public/products/` are default fallbacks only — there is no in-app asset picker.
 
 ---
 
@@ -183,8 +183,11 @@ Use Zustand only for client-side state that doesn't belong in the server (e.g. c
 **Zod schemas drive types**
 Define schemas in `src/lib/schemas/`, infer types with `z.infer<>`, re-export from `src/types/index.ts`. No manual type duplication.
 
-**Cloudinary for uploaded images, public/ for static assets**
-Product images uploaded by the user go through next-cloudinary. Category icons or decoration images are static files in `public/`.
+**Client-side filtering for bounded datasets**
+When a Server Component already loads a complete, bounded dataset (e.g. the product catalog), prefer in-memory `.filter()` over URL `searchParams` + Prisma re-query or a TanStack Query re-fetch. For this app the product count is small and staff-only, so filtering is instant and adds no server load. Use URL-based or TanStack search only when the dataset requires pagination or is too large to load upfront.
+
+**Cloudinary for uploaded images, public/ for fallbacks**
+Product images are uploaded by the user via next-cloudinary (CldUploadWidget). Images in `public/products/` are default fallbacks rendered by `getImagePath` when a product has no Cloudinary URL — they are not selectable from the UI. Category icons or decoration images are static files in `public/`.
 
 ## Environment Variables
 

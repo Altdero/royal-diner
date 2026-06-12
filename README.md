@@ -2,6 +2,8 @@
 
 A diner order management system built with Next.js 16, React 19, and PostgreSQL.
 
+> **For developers:** [`AGENTS.md`](./AGENTS.md) is the source of truth for architecture, conventions, data model, and design decisions. Read it before contributing.
+
 ## Modules
 
 | Module   | Route       | Description                                    |
