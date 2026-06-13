@@ -172,7 +172,7 @@ Four Prisma models: `Category`, `Product`, `Order`, `OrderItem`. `OrderStatus` e
 ## Architectural Decisions
 
 **Full-stack Next.js — API routes + Prisma**
-All database access goes through Next.js Route Handlers (`app/*/route.ts`). Never import `lib/prisma.ts` inside a Client Component.
+Server Component pages fetch data directly from Prisma (`@/src/lib/prisma`) using `select` to return only the fields needed — no HTTP round-trip to your own API. Never import `lib/prisma.ts` inside a Client Component. API Route Handlers remain the data layer for client-side mutations (TanStack Query hooks call them via `fetch`). After a mutation that stays on the same page (e.g. delete), call `router.refresh()` to re-run the Server Component and get fresh data.
 
 **TanStack Query for all client-side data fetching**
 Mutations and queries use TanStack Query. Keys are domain strings (e.g. `["products"]`, `["orders", "pending"]`). Provide the `QueryClient` via a single provider in `app/layout.tsx`.

@@ -10,6 +10,7 @@ import { useDeleteProduct } from "@/src/hooks/useProductMutations";
 import { formatCurrency } from "@/src/lib/utils/formatCurrency";
 import { getImagePath } from "@/src/lib/utils/getImagePath";
 import type { ProductType } from "@/src/types";
+import { filterProducts } from "@/src/lib/utils/filterProducts";
 import { ProductSearch } from "./ProductSearch";
 
 interface ProductsTableProps {
@@ -28,12 +29,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
     return () => clearTimeout(id);
   }, [search]);
 
-  // Client-side filter: product catalog is small and staff-only — see AGENTS.md
-  const filtered = debouncedSearch
-    ? products.filter((p) =>
-        p.name.toLowerCase().includes(debouncedSearch.toLowerCase())
-      )
-    : products;
+  const filtered = filterProducts(products, debouncedSearch);
 
   const handleConfirmDelete = () => {
     if (!toDelete) return;
