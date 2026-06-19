@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="mx-auto flex min-h-full w-full max-w-7xl flex-col bg-slate-100">
+      <body className="mx-auto flex h-full w-full max-w-7xl flex-col bg-slate-100">
         <QueryProvider>
           <Nav />
           {children}
