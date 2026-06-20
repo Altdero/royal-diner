@@ -32,7 +32,7 @@ export function useCreateOrder() {
   return useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Order placed successfully");
     },
     onError: () => toast.error("Failed to place order"),
@@ -51,6 +51,7 @@ export function useUpdateOrderStatus() {
     }) => updateOrderStatus(orderId, status),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order marked as ready");
     },
     onError: () => toast.error("Failed to update order status"),
   });
