@@ -41,13 +41,22 @@ export function ProductsTable({ products }: ProductsTableProps) {
     });
   };
 
+  const liveMessage = debouncedSearch
+    ? filtered.length === 0
+      ? `No products match "${debouncedSearch}"`
+      : `${filtered.length} product${filtered.length === 1 ? "" : "s"} found`
+    : "";
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden p-4 md:mx-auto md:w-fit md:min-w-212.5">
       <div className="mb-6">
         <h1 className="text-center text-2xl font-bold text-stone-900">
           Products
         </h1>
-        <nav className="my-5 flex items-center justify-between gap-3">
+        <nav
+          aria-label="Products actions"
+          className="my-5 flex items-center justify-between gap-3"
+        >
           <ProductSearch value={search} onChange={setSearch} />
           <Link
             href="/products/new"
@@ -58,15 +67,30 @@ export function ProductsTable({ products }: ProductsTableProps) {
         </nav>
       </div>
 
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {liveMessage}
+      </div>
+
       <div className="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+        <table aria-label="Products" className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold tracking-wide text-stone-500 uppercase">
             <tr>
-              <th className="w-14 px-4 py-3" />
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3">Unit Price</th>
-              <th className="px-4 py-3" />
+              <th scope="col" aria-label="Image" className="w-14 px-4 py-3" />
+              <th scope="col" className="px-4 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Category
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Unit Price
+              </th>
+              <th scope="col" aria-label="Actions" className="px-4 py-3" />
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -110,7 +134,10 @@ export function ProductsTable({ products }: ProductsTableProps) {
                     />
                   ) : (
                     <div className="flex size-10 items-center justify-center rounded-lg bg-slate-200">
-                      <PhotoIcon className="size-5 text-slate-400" />
+                      <PhotoIcon
+                        aria-hidden="true"
+                        className="size-5 text-slate-400"
+                      />
                     </div>
                   )}
                 </td>
@@ -127,12 +154,14 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   <div className="hidden items-center gap-2 sm:flex">
                     <Link
                       href={`/products/${product.id}/edit`}
+                      aria-label={`Edit ${product.name}`}
                       className="rounded-lg border border-slate-400 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase transition duration-300 hover:border-slate-500 hover:text-slate-500"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => setToDelete(product)}
+                      aria-label={`Delete ${product.name}`}
                       className="cursor-pointer rounded-lg border border-rose-400 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-400 uppercase transition duration-300 hover:border-rose-500 hover:text-rose-500"
                     >
                       Delete
@@ -143,14 +172,20 @@ export function ProductsTable({ products }: ProductsTableProps) {
                       href={`/products/${product.id}/edit`}
                       aria-label={`Edit ${product.name}`}
                     >
-                      <PencilIcon className="size-4 text-slate-400" />
+                      <PencilIcon
+                        aria-hidden="true"
+                        className="size-4 text-slate-400"
+                      />
                     </Link>
                     <button
                       aria-label={`Delete ${product.name}`}
                       onClick={() => setToDelete(product)}
                       className="cursor-pointer"
                     >
-                      <TrashIcon className="size-4 text-rose-400" />
+                      <TrashIcon
+                        aria-hidden="true"
+                        className="size-4 text-rose-400"
+                      />
                     </button>
                   </div>
                 </td>

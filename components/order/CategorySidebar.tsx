@@ -37,7 +37,7 @@ function CategoryIcon({ iconSrc }: { iconSrc: string | null; name: string }) {
       />
     );
   }
-  return <Squares2X2Icon className="size-5 shrink-0" />;
+  return <Squares2X2Icon aria-hidden="true" className="size-5 shrink-0" />;
 }
 
 export function CategorySidebar({
@@ -59,11 +59,16 @@ export function CategorySidebar({
   return (
     <>
       {/* Mobile: horizontal scrollable pills */}
-      <div className="flex gap-2 overflow-x-auto border-b border-stone-200 bg-white px-4 py-3 lg:hidden">
+      <div
+        role="group"
+        aria-label="Filter by category"
+        className="flex gap-2 overflow-x-auto border-b border-stone-200 bg-white px-4 py-3 lg:hidden"
+      >
         {items.map((item) => (
           <button
             key={item.id ?? "all"}
             onClick={() => onCategoryChange(item.id)}
+            aria-pressed={activeCategory === item.id}
             className={`flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold transition duration-200 ${
               activeCategory === item.id
                 ? "bg-violet-700 text-white shadow-sm"
@@ -98,6 +103,7 @@ export function CategorySidebar({
           }`}
         >
           <span
+            aria-hidden={isCollapsed}
             className={`overflow-hidden text-xs font-semibold tracking-widest whitespace-nowrap text-stone-400 uppercase transition-all duration-300 ${
               isCollapsed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
             }`}
@@ -106,25 +112,30 @@ export function CategorySidebar({
           </span>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            title={isCollapsed ? "Expand menu" : "Collapse menu"}
+            aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
+            aria-expanded={!isCollapsed}
             className="cursor-pointer rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
           >
             {isCollapsed ? (
-              <ChevronRightIcon className="size-4" />
+              <ChevronRightIcon aria-hidden="true" className="size-4" />
             ) : (
-              <ChevronLeftIcon className="size-4" />
+              <ChevronLeftIcon aria-hidden="true" className="size-4" />
             )}
           </button>
         </div>
 
         {/* Nav items */}
-        <nav className="flex flex-col gap-0.5 p-2">
+        <nav
+          aria-label="Category navigation"
+          className="flex flex-col gap-0.5 p-2"
+        >
           {items.map((item) => {
             const isActive = activeCategory === item.id;
             return (
               <button
                 key={item.id ?? "all"}
                 onClick={() => onCategoryChange(item.id)}
+                aria-pressed={isActive}
                 title={isCollapsed ? item.name : undefined}
                 className={`relative flex cursor-pointer items-center gap-2 rounded-lg transition duration-150 ${
                   isActive
@@ -137,6 +148,7 @@ export function CategorySidebar({
                 )}
                 <CategoryIcon iconSrc={item.iconSrc} name={item.name} />
                 <span
+                  aria-hidden={isCollapsed}
                   className={`overflow-hidden text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                     isCollapsed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
                   }`}

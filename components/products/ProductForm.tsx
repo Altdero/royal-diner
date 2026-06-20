@@ -106,18 +106,20 @@ export function ProductForm({
   const isBusy =
     isUploading || createProduct.isPending || updateProduct.isPending;
 
+  const categoryErrorId = "categoryId-error";
+
   return (
     <div className="mx-auto w-full max-w-lg p-6">
       <div className="mb-6 w-full">
         <h1 className="text-center text-2xl font-bold text-stone-900">
           {title}
         </h1>
-        <nav className="my-5 flex">
+        <nav aria-label="Breadcrumb" className="my-5 flex">
           <Link
             href="/products"
             className="flex items-center gap-1 text-sm text-stone-500 transition duration-200 hover:text-violet-700"
           >
-            <ArrowLeftIcon className="size-4" /> Products
+            <ArrowLeftIcon aria-hidden="true" className="size-4" /> Products
           </Link>
         </nav>
       </div>
@@ -151,6 +153,8 @@ export function ProductForm({
             </label>
             <select
               id="categoryId"
+              aria-invalid={!!errors.categoryId}
+              aria-describedby={errors.categoryId ? categoryErrorId : undefined}
               className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-stone-900 transition duration-200 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
               {...register("categoryId")}
             >
@@ -162,7 +166,11 @@ export function ProductForm({
               ))}
             </select>
             {errors.categoryId && (
-              <p className="text-sm text-rose-500">
+              <p
+                id={categoryErrorId}
+                role="alert"
+                className="text-sm text-rose-500"
+              >
                 {errors.categoryId.message}
               </p>
             )}
@@ -174,7 +182,12 @@ export function ProductForm({
           />
 
           <div className="flex justify-center gap-3 pt-2">
-            <Button type="submit" variant="primary" disabled={isBusy}>
+            <Button
+              type="submit"
+              variant="primary"
+              isLoading={isBusy}
+              disabled={isBusy}
+            >
               {isUploading ? "Uploading…" : isBusy ? "Saving…" : "Save"}
             </Button>
             <Link

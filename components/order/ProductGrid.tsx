@@ -13,10 +13,15 @@ interface ProductGridProps {
 export function ProductGrid({ products, onAdd, isLoading }: ProductGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+      <div
+        role="status"
+        aria-label="Loading products"
+        className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4"
+      >
         {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={i}
+            aria-hidden="true"
             className="animate-pulse overflow-hidden rounded-xl border border-stone-200 bg-white"
           >
             <div className="h-28 bg-slate-200 sm:h-32" />
@@ -33,8 +38,12 @@ export function ProductGrid({ products, onAdd, isLoading }: ProductGridProps) {
 
   if (products.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20 text-slate-400">
-        <ShoppingBagIcon className="size-12 opacity-40" />
+      <div
+        role="status"
+        aria-live="polite"
+        className="flex flex-1 flex-col items-center justify-center gap-3 py-20 text-slate-400"
+      >
+        <ShoppingBagIcon aria-hidden="true" className="size-12 opacity-40" />
         <p className="text-sm">No products found.</p>
       </div>
     );

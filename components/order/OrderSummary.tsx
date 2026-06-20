@@ -31,11 +31,17 @@ export function OrderSummary({
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <aside className="flex max-h-100 flex-col border-t border-stone-200 bg-white lg:max-h-none lg:w-80 lg:shrink-0 lg:border-t-0 lg:border-l">
+    <aside
+      aria-label="Order summary"
+      className="flex max-h-100 flex-col border-t border-stone-200 bg-white lg:max-h-none lg:w-80 lg:shrink-0 lg:border-t-0 lg:border-l"
+    >
       <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4">
         <h2 className="font-bold text-stone-900">Order Summary</h2>
         {itemCount > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-700 px-1.5 text-xs font-bold text-white">
+          <span
+            aria-label={`${itemCount} items in order`}
+            className="flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-700 px-1.5 text-xs font-bold text-white"
+          >
             {itemCount}
           </span>
         )}
@@ -52,7 +58,7 @@ export function OrderSummary({
 
         {items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 text-slate-300">
-            <ShoppingCartIcon className="size-12" />
+            <ShoppingCartIcon aria-hidden="true" className="size-12" />
             <p className="text-sm text-slate-400">
               Tap a product to add it here.
             </p>
@@ -81,6 +87,7 @@ export function OrderSummary({
         <Button
           className="w-full"
           onClick={onSubmit}
+          isLoading={isSubmitting}
           disabled={isSubmitting || items.length === 0 || !clientName.trim()}
         >
           {isSubmitting ? "Placing Order…" : "Place Order"}

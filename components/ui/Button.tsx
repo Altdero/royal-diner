@@ -6,6 +6,7 @@ type ButtonSize = "sm" | "md" | "lg";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  isLoading?: boolean;
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -27,12 +28,15 @@ const sizeClasses: Record<ButtonSize, string> = {
 export function Button({
   variant = "primary",
   size = "md",
+  isLoading = false,
   className = "",
   children,
   ...props
 }: ButtonProps) {
   return (
     <button
+      aria-busy={isLoading || undefined}
+      aria-disabled={isLoading || undefined}
       className={`cursor-pointer rounded-lg border font-semibold uppercase transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...props}
     >

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 
 interface ConfirmModalProps {
@@ -19,28 +20,62 @@ export function ConfirmModal({
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
-  if (!isOpen) return null;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isOpen) {
+      dialog.showModal();
+    } else {
+      dialog.close();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const handleClose = () => onCancel();
+    dialog.addEventListener("close", handleClose);
+    return () => dialog.removeEventListener("close", handleClose);
+  }, [onCancel]);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    const rect = dialogRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const clickedOutside =
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom;
+    if (clickedOutside) onCancel();
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onCancel}
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="confirm-dialog-title"
+      aria-describedby="confirm-dialog-desc"
+      onClick={handleBackdropClick}
+      className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 shadow-lg backdrop:bg-black/40 open:flex open:flex-col"
     >
-      <div
-        className="w-full max-w-sm rounded-lg border border-slate-200 bg-white p-6 shadow-lg"
-        onClick={(e) => e.stopPropagation()}
+      <h2
+        id="confirm-dialog-title"
+        className="mb-2 text-lg font-semibold text-stone-900"
       >
-        <h2 className="mb-2 text-lg font-semibold text-stone-900">{title}</h2>
-        <p className="mb-6 text-sm text-stone-500">{message}</p>
-        <div className="flex justify-end gap-3">
-          <Button variant="ghost" size="sm" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button variant="danger" size="sm" onClick={onConfirm}>
-            {confirmLabel}
-          </Button>
-        </div>
+        {title}
+      </h2>
+      <p id="confirm-dialog-desc" className="mb-6 text-sm text-stone-500">
+        {message}
+      </p>
+      <div className="flex justify-end gap-3">
+        <Button variant="ghost" size="sm" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button variant="danger" size="sm" onClick={onConfirm}>
+          {confirmLabel}
+        </Button>
       </div>
-    </div>
+    </dialog>
   );
 }

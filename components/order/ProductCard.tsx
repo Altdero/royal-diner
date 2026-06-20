@@ -15,6 +15,7 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
   return (
     <button
       onClick={() => onAdd(product)}
+      aria-label={`Add ${product.name} to order, ${formatCurrency(product.price)}`}
       className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-stone-200 bg-white text-left shadow-sm transition duration-200 hover:border-violet-300 hover:shadow-md active:scale-[0.98]"
     >
       <div className="relative h-28 shrink-0 bg-slate-100 sm:h-32">
@@ -29,11 +30,11 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <PhotoIcon className="size-10 text-slate-300" />
+            <PhotoIcon aria-hidden="true" className="size-10 text-slate-300" />
           </div>
         )}
         <div className="absolute right-2 bottom-2 flex size-7 items-center justify-center rounded-full bg-violet-700 text-white opacity-0 shadow-md transition duration-200 group-hover:opacity-100">
-          <PlusIcon className="size-4" />
+          <PlusIcon aria-hidden="true" className="size-4" />
         </div>
       </div>
 
