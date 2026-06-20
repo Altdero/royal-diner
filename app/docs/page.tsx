@@ -1,14 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { DocsClient } from "@/components/docs/DocsClient";
 
-import dynamic from "next/dynamic";
-import "swagger-ui-react/swagger-ui.css";
-
-const SwaggerUI = dynamic(() => import("swagger-ui-react"), { ssr: false });
+export const metadata: Metadata = {
+  title: "API Docs",
+  description: "OpenAPI documentation for the Royal Diner API.",
+};
 
 export default function DocsPage() {
-  return (
-    <div className="min-h-screen bg-white">
-      <SwaggerUI url="/api/docs" />
-    </div>
-  );
+  return <DocsClient />;
 }

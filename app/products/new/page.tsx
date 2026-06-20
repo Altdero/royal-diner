@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { prisma } from "@/src/lib/prisma";
 import { ProductForm } from "@/components/products/ProductForm";
+
+export const metadata: Metadata = {
+  title: "New Product",
+  description: "Add a new product to the catalog.",
+};
 
 export default async function NewProductPage() {
   const categories = await prisma.category.findMany({
