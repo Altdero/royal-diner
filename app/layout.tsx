@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Royal Diner",
+  title: {
+    template: "%s | Royal Diner",
+    default: "Royal Diner",
+  },
   description: "Diner order management system",
 };
 

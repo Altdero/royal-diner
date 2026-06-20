@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { prisma } from "@/src/lib/prisma";
 import { ProductsTable } from "@/components/products/ProductsTable";
+
+export const metadata: Metadata = {
+  title: "Products",
+  description: "Manage the product catalog — add, edit, or remove items.",
+};
 
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({

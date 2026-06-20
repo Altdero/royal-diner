@@ -289,3 +289,4 @@ Every page and component must meet WCAG 2.1 AA. Apply these standards without be
 10. **Add Swagger JSDoc comments to every new Route Handler.** Follow the existing pattern in `app/api/`.
 11. **Tests go in `__tests__/` and match the pattern `*.test.ts`.** Write tests for utils and API handlers when truly necessary.
 12. **Apply a11y standards to every page and component you create or modify.** Follow the Accessibility section in Coding Conventions. Do not ship interactive elements without accessible names, form fields without labels, or modals without the full dialog pattern.
+13. **Add metadata to every page.** Export a `metadata` object (or `generateMetadata` for dynamic pages) from every `page.tsx`. At minimum include `title` and `description`.
