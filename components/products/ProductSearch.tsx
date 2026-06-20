@@ -9,10 +9,14 @@ interface ProductSearchProps {
 
 export function ProductSearch({ value, onChange }: ProductSearchProps) {
   return (
-    <div className="relative flex-1 md:max-w-100">
-      <MagnifyingGlassIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+    <div role="search" className="relative flex-1 md:max-w-100">
+      <MagnifyingGlassIcon
+        aria-hidden="true"
+        className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400"
+      />
       <input
         type="text"
+        aria-label="Search products"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search products…"
@@ -24,7 +28,7 @@ export function ProductSearch({ value, onChange }: ProductSearchProps) {
           className="absolute top-1/2 right-2.5 -translate-y-1/2 cursor-pointer text-slate-400 hover:text-slate-600"
           aria-label="Clear search"
         >
-          <XMarkIcon className="size-4" />
+          <XMarkIcon aria-hidden="true" className="size-4" />
         </button>
       )}
     </div>

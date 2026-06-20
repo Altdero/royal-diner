@@ -32,8 +32,19 @@ export default function RootLayout({
     >
       <body className="mx-auto flex h-full w-full max-w-7xl flex-col bg-slate-100">
         <QueryProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:rounded-lg focus:bg-violet-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
+          >
+            Skip to main content
+          </a>
           <Nav />
-          {children}
+          <main
+            id="main-content"
+            className="flex flex-1 flex-col overflow-hidden"
+          >
+            {children}
+          </main>
           <Toaster richColors position="top-right" />
         </QueryProvider>
       </body>

@@ -256,6 +256,19 @@ yarn prepare      # Set up Husky git hooks
 - `toast.error()` for API failures
 - Call inside event handlers or `useEffect` — never during render
 
+**Accessibility (a11y)**
+
+Every page and component must meet WCAG 2.1 AA. Apply these standards without being asked:
+
+- All interactive elements must have an accessible name: use `aria-label` for icon-only buttons/links; include the item name for repeated actions (e.g. "Delete Espresso", not just "Delete")
+- All `<input>` and `<select>` elements must have an associated `<label>` or `aria-label`; never rely on `placeholder` alone
+- Use semantic HTML landmarks: `<main>`, `<nav aria-label="…">`, `<aside aria-label="…">`; do not use bare `<div>` for landmark regions
+- Communicate state programmatically: `aria-current="page"` on active nav links; `aria-pressed` or `aria-current` on toggle/filter buttons; `aria-expanded` on collapsible controls; `aria-invalid` + `aria-describedby` on form fields with errors; `aria-busy` on buttons during async operations
+- Modal dialogs require `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`, a focus trap, and Escape key dismissal
+- Dynamic content changes must be announced: use `role="status"` or `aria-live="polite"` for loading states and empty-state messages
+- Decorative SVG icons must have `aria-hidden="true"`
+- CSS-only visibility tricks (`opacity-0`, `max-w-0`) do not remove content from the accessibility tree — use `aria-hidden` or `hidden` when content must be invisible to assistive technology
+
 **ESLint / Prettier**
 
 - Flat config (ESLint v9+)
@@ -275,3 +288,4 @@ yarn prepare      # Set up Husky git hooks
 9. **Never import `src/lib/prisma.ts` in a Client Component.** Database access is server-only via Route Handlers.
 10. **Add Swagger JSDoc comments to every new Route Handler.** Follow the existing pattern in `app/api/`.
 11. **Tests go in `__tests__/` and match the pattern `*.test.ts`.** Write tests for utils and API handlers when truly necessary.
+12. **Apply a11y standards to every page and component you create or modify.** Follow the Accessibility section in Coding Conventions. Do not ship interactive elements without accessible names, form fields without labels, or modals without the full dialog pattern.

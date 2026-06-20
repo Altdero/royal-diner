@@ -31,7 +31,7 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <PhotoIcon className="size-5 text-slate-300" />
+            <PhotoIcon aria-hidden="true" className="size-5 text-slate-300" />
           </div>
         )}
       </div>
@@ -46,18 +46,24 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
       <div className="flex items-center gap-1.5">
         <button
           onClick={() => onUpdateQty(item.productId, item.quantity - 1)}
+          aria-label={`Decrease quantity of ${item.name}`}
           className="flex size-6 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-400 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-600"
         >
-          <MinusIcon className="size-3" />
+          <MinusIcon aria-hidden="true" className="size-3" />
         </button>
-        <span className="w-4 text-center text-sm font-bold text-stone-800">
+        <span
+          aria-live="polite"
+          aria-atomic="true"
+          className="w-4 text-center text-sm font-bold text-stone-800"
+        >
           {item.quantity}
         </span>
         <button
           onClick={() => onUpdateQty(item.productId, item.quantity + 1)}
+          aria-label={`Increase quantity of ${item.name}`}
           className="flex size-6 cursor-pointer items-center justify-center rounded-full border border-violet-200 bg-violet-50 text-violet-600 transition hover:bg-violet-100"
         >
-          <PlusIcon className="size-3" />
+          <PlusIcon aria-hidden="true" className="size-3" />
         </button>
       </div>
 
@@ -67,9 +73,10 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
         </span>
         <button
           onClick={() => onRemove(item.productId)}
+          aria-label={`Remove ${item.name} from order`}
           className="cursor-pointer rounded-full p-0.5 text-slate-300 transition hover:bg-rose-50 hover:text-rose-400"
         >
-          <XMarkIcon className="size-3.5" />
+          <XMarkIcon aria-hidden="true" className="size-3.5" />
         </button>
       </div>
     </div>
