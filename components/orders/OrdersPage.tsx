@@ -1,110 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import type { OrderType } from "@/src/types";
+import { useOrders } from "@/src/hooks/useOrders";
 import { OrdersPanel, ordersPanelConfig } from "./OrdersPanel";
 
-const MOCK_PENDING: OrderType[] = [
-  {
-    id: "1",
-    orderNumber: 1,
-    clientName: "Alice",
-    total: 14.5,
-    status: "PENDING",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        id: "i1",
-        orderId: "1",
-        productId: "p1",
-        quantity: 2,
-        subtotal: 7,
-        product: { id: "p1", name: "Espresso", image: null },
-      },
-      {
-        id: "i2",
-        orderId: "1",
-        productId: "p2",
-        quantity: 1,
-        subtotal: 7.5,
-        product: { id: "p2", name: "Croissant", image: null },
-      },
-    ],
-  },
-  {
-    id: "2",
-    orderNumber: 2,
-    clientName: "Bob",
-    total: 22,
-    status: "PENDING",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        id: "i3",
-        orderId: "2",
-        productId: "p3",
-        quantity: 1,
-        subtotal: 12,
-        product: { id: "p3", name: "Burger", image: null },
-      },
-      {
-        id: "i4",
-        orderId: "2",
-        productId: "p4",
-        quantity: 2,
-        subtotal: 10,
-        product: { id: "p4", name: "Cappuccino", image: null },
-      },
-    ],
-  },
-];
+const TAB_KEYS = ["pending", "ready"] as const;
+type TabKey = (typeof TAB_KEYS)[number];
 
-const MOCK_READY: OrderType[] = [
-  {
-    id: "3",
-    orderNumber: 3,
-    clientName: "Carol",
-    total: 9,
-    status: "READY",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        id: "i5",
-        orderId: "3",
-        productId: "p5",
-        quantity: 3,
-        subtotal: 9,
-        product: { id: "p5", name: "Donut", image: null },
-      },
-    ],
-  },
-];
-
-const TABS = [
-  { key: "pending", label: "To Prepare", orders: MOCK_PENDING },
-  { key: "ready", label: "Ready", orders: MOCK_READY },
-] as const;
-
-type TabKey = (typeof TABS)[number]["key"];
+const TAB_LABELS: Record<TabKey, string> = {
+  pending: "To Prepare",
+  ready: "Ready",
+};
 
 export function OrdersPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("pending");
+
+  const { data: pendingOrders = [] } = useOrders("PENDING");
+  const { data: readyOrders = [] } = useOrders("READY");
+
+  const ordersByTab: Record<TabKey, typeof pendingOrders> = {
+    pending: pendingOrders,
+    ready: readyOrders,
+  };
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Mobile tab switcher */}
       <nav aria-label="Order panels" className="flex shrink-0 lg:hidden">
-        {TABS.map((tab) => {
-          const c = ordersPanelConfig[tab.key];
+        {TAB_KEYS.map((key) => {
+          const c = ordersPanelConfig[key];
           const Icon = c.icon;
-          const isActive = activeTab === tab.key;
+          const isActive = activeTab === key;
+          const count = ordersByTab[key].length;
           return (
             <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              key={key}
+              onClick={() => setActiveTab(key)}
               aria-current={isActive ? "page" : undefined}
               className={`flex flex-1 items-center justify-center gap-2 border-b-2 px-4 py-3.5 text-sm font-semibold transition-colors duration-200 ${
                 isActive
@@ -113,11 +44,11 @@ export function OrdersPage() {
               }`}
             >
               <Icon aria-hidden="true" className="size-4" />
-              {tab.label}
+              {TAB_LABELS[key]}
               <span
                 className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold text-white ${c.badgeBg}`}
               >
-                {tab.orders.length}
+                {count}
               </span>
             </button>
           );
@@ -136,7 +67,7 @@ export function OrdersPage() {
           <OrdersPanel
             title="To Prepare"
             variant="pending"
-            orders={MOCK_PENDING}
+            orders={pendingOrders}
           />
         </div>
         <div
@@ -146,7 +77,7 @@ export function OrdersPage() {
               : "hidden lg:flex lg:flex-1"
           }
         >
-          <OrdersPanel title="Ready" variant="ready" orders={MOCK_READY} />
+          <OrdersPanel title="Ready" variant="ready" orders={readyOrders} />
         </div>
       </div>
     </div>
