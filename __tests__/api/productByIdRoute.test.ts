@@ -70,6 +70,17 @@ describe("PUT /api/products/[productId]", () => {
     expect(res.status).toBe(400);
   });
 
+  it("returns 404 when the product is not found", async () => {
+    mockUpdate.mockRejectedValue({ code: "P2025" });
+    const req = new Request("http://localhost/api/products/prod-1", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validBody),
+    });
+    const res = await PUT(req, { params });
+    expect(res.status).toBe(404);
+  });
+
   it("returns 500 on an unexpected error", async () => {
     mockUpdate.mockRejectedValue(new Error("DB error"));
     const req = new Request("http://localhost/api/products/prod-1", {
@@ -90,5 +101,23 @@ describe("DELETE /api/products/[productId]", () => {
     });
     const res = await DELETE(req, { params });
     expect(res.status).toBe(204);
+  });
+
+  it("returns 404 when the product is not found", async () => {
+    mockDelete.mockRejectedValue({ code: "P2025" });
+    const req = new Request("http://localhost/api/products/prod-1", {
+      method: "DELETE",
+    });
+    const res = await DELETE(req, { params });
+    expect(res.status).toBe(404);
+  });
+
+  it("returns 409 when the product is referenced by orders", async () => {
+    mockDelete.mockRejectedValue({ code: "P2003" });
+    const req = new Request("http://localhost/api/products/prod-1", {
+      method: "DELETE",
+    });
+    const res = await DELETE(req, { params });
+    expect(res.status).toBe(409);
   });
 });

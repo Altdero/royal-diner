@@ -49,6 +49,17 @@ describe("PATCH /api/orders/[orderId]", () => {
     expect(res.status).toBe(400);
   });
 
+  it("returns 404 when the order does not exist", async () => {
+    mockUpdate.mockRejectedValue({ code: "P2025" });
+    const req = new Request("http://localhost/api/orders/order-1", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "READY" }),
+    });
+    const res = await PATCH(req, { params });
+    expect(res.status).toBe(404);
+  });
+
   it("returns 500 on an unexpected error", async () => {
     mockUpdate.mockRejectedValue(new Error("DB error"));
     const req = new Request("http://localhost/api/orders/order-1", {
