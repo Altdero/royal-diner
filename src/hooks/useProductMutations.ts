@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import type {
   CreateProductType,
@@ -37,37 +38,40 @@ async function deleteProduct(productId: string): Promise<void> {
 }
 
 export function useCreateProduct() {
+  const t = useTranslations("products");
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Product created");
+      toast.success(t("toastCreated"));
     },
-    onError: () => toast.error("Failed to create product"),
+    onError: () => toast.error(t("toastFailedCreate")),
   });
 }
 
 export function useUpdateProduct(productId: string) {
+  const t = useTranslations("products");
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: UpdateProductType) => updateProduct(productId, data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Product updated");
+      toast.success(t("toastUpdated"));
     },
-    onError: () => toast.error("Failed to update product"),
+    onError: () => toast.error(t("toastFailedUpdate")),
   });
 }
 
 export function useDeleteProduct() {
+  const t = useTranslations("products");
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Product deleted");
+      toast.success(t("toastDeleted"));
     },
-    onError: () => toast.error("Failed to delete product"),
+    onError: () => toast.error(t("toastFailedDelete")),
   });
 }

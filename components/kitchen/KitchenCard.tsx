@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import type { OrderType } from "@/src/types";
 
@@ -14,14 +15,20 @@ export function KitchenCard({
   onMarkReady,
   isLoading,
 }: KitchenCardProps) {
+  const t = useTranslations("kitchen");
+  const orderNum = String(order.orderNumber).padStart(3, "0");
+
   return (
     <article
-      aria-label={`Order #${String(order.orderNumber).padStart(3, "0")}, ${order.clientName}`}
+      aria-label={t("orderAriaLabel", {
+        orderNumber: orderNum,
+        clientName: order.clientName,
+      })}
       className="flex flex-col rounded-xl border border-stone-200 bg-white shadow-sm"
     >
       <header className="border-b border-stone-100 px-5 py-4">
         <span className="text-xs font-semibold tracking-widest text-stone-400 uppercase">
-          Order #{String(order.orderNumber).padStart(3, "0")}
+          #{orderNum}
         </span>
         <p className="mt-1 text-lg font-bold text-stone-900">
           {order.clientName}
@@ -47,10 +54,10 @@ export function KitchenCard({
           onClick={() => onMarkReady(order.id)}
           isLoading={isLoading}
           disabled={isLoading}
-          aria-label={`Mark order #${String(order.orderNumber).padStart(3, "0")} as ready`}
+          aria-label={t("markReadyAriaLabel", { orderNumber: orderNum })}
           className="flex w-full items-center justify-center gap-2"
         >
-          {isLoading ? "Updating…" : "Mark as Ready"}
+          {isLoading ? t("updating") : t("markAsReady")}
         </Button>
       </div>
     </article>

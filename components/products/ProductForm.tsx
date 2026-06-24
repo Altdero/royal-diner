@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Link, useRouter } from "@/src/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ImagePicker } from "@/components/products/ImagePicker";
@@ -19,7 +19,6 @@ import { createProductSchema } from "@/src/lib/schemas/productSchema";
 import type { CategoryType, CreateProductType, ProductType } from "@/src/types";
 
 interface ProductFormProps {
-  title: string;
   productId?: string;
   product?: ProductType;
   categories: CategoryType[];
@@ -42,11 +41,13 @@ const uploadToCloudinary = async (file: File): Promise<string> => {
 };
 
 export function ProductForm({
-  title,
   productId,
   product,
   categories,
 }: ProductFormProps) {
+  const t = useTranslations("products");
+  const tf = useTranslations("products.form");
+  const tc = useTranslations("common");
   const router = useRouter();
   const isEditing = !!productId;
 
@@ -83,7 +84,7 @@ export function ProductForm({
       try {
         imageUrl = await uploadToCloudinary(pendingFile);
       } catch {
-        toast.error("Failed to upload image. Please try again.");
+        toast.error(tf("failedImageUpload"));
         setIsUploading(false);
         return;
       }
@@ -108,6 +109,12 @@ export function ProductForm({
 
   const categoryErrorId = "categoryId-error";
 
+  const title = isEditing
+    ? product
+      ? t("editProductTitle", { name: product.name })
+      : t("newProductTitle")
+    : t("newProductTitle");
+
   return (
     <div className="mx-auto w-full max-w-lg p-6">
       <div className="mb-6 w-full">
@@ -119,7 +126,8 @@ export function ProductForm({
             href="/products"
             className="flex items-center gap-1 text-sm text-stone-500 transition duration-200 hover:text-violet-700"
           >
-            <ArrowLeftIcon aria-hidden="true" className="size-4" /> Products
+            <ArrowLeftIcon aria-hidden="true" className="size-4" />{" "}
+            {tf("breadcrumbBack")}
           </Link>
         </nav>
       </div>
@@ -128,17 +136,17 @@ export function ProductForm({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <Input
             id="name"
-            label="Name"
-            placeholder="e.g. Espresso"
+            label={tf("nameLabel")}
+            placeholder={tf("namePlaceholder")}
             error={errors.name?.message}
             {...register("name")}
           />
 
           <Input
             id="price"
-            label="Unit Price"
+            label={tf("priceLabel")}
             type="number"
-            placeholder="0.00"
+            placeholder={tf("pricePlaceholder")}
             step={0.01}
             error={errors.price?.message}
             {...register("price")}
@@ -149,7 +157,7 @@ export function ProductForm({
               htmlFor="categoryId"
               className="text-sm font-medium text-stone-700"
             >
-              Category
+              {tf("categoryLabel")}
             </label>
             <select
               id="categoryId"
@@ -158,7 +166,7 @@ export function ProductForm({
               className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-stone-900 transition duration-200 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
               {...register("categoryId")}
             >
-              <option value="">Select a category</option>
+              <option value="">{tf("categoryPlaceholder")}</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -188,13 +196,17 @@ export function ProductForm({
               isLoading={isBusy}
               disabled={isBusy}
             >
-              {isUploading ? "Uploading…" : isBusy ? "Saving…" : "Save"}
+              {isUploading
+                ? tc("uploading")
+                : isBusy
+                  ? tc("saving")
+                  : tc("save")}
             </Button>
             <Link
               href="/products"
               className="rounded-lg border border-cyan-400 bg-cyan-50 px-4 py-2.5 text-base font-semibold text-cyan-400 uppercase transition duration-300 hover:border-cyan-500 hover:text-cyan-500"
             >
-              Cancel
+              {tc("cancel")}
             </Link>
           </div>
         </form>

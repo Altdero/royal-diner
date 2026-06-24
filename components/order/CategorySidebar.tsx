@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import {
   ChevronLeftIcon,
@@ -45,10 +46,15 @@ export function CategorySidebar({
   activeCategory,
   onCategoryChange,
 }: CategorySidebarProps) {
+  const t = useTranslations("order.sidebar");
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const items = [
-    { id: null as string | null, name: "All", iconSrc: null as string | null },
+    {
+      id: null as string | null,
+      name: t("allCategory"),
+      iconSrc: null as string | null,
+    },
     ...categories.map((cat) => ({
       id: cat.id,
       name: cat.name,
@@ -61,7 +67,7 @@ export function CategorySidebar({
       {/* Mobile: horizontal scrollable pills */}
       <div
         role="group"
-        aria-label="Filter by category"
+        aria-label={t("filterAriaLabel")}
         className="flex gap-2 overflow-x-auto border-b border-stone-200 bg-white px-4 py-3 lg:hidden"
       >
         {items.map((item) => (
@@ -108,11 +114,11 @@ export function CategorySidebar({
               isCollapsed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
             }`}
           >
-            Menu
+            {t("allCategory")}
           </span>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
+            aria-label={isCollapsed ? t("expandMenu") : t("collapseMenu")}
             aria-expanded={!isCollapsed}
             className="cursor-pointer rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
           >
@@ -126,7 +132,7 @@ export function CategorySidebar({
 
         {/* Nav items */}
         <nav
-          aria-label="Category navigation"
+          aria-label={t("navAriaLabel")}
           className="flex flex-col gap-0.5 p-2"
         >
           {items.map((item) => {

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
+import { useRouter } from "@/src/i18n/navigation";
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { useDeleteProduct } from "@/src/hooks/useProductMutations";
@@ -18,6 +19,7 @@ interface ProductsTableProps {
 }
 
 export function ProductsTable({ products }: ProductsTableProps) {
+  const t = useTranslations("products");
   const router = useRouter();
   const deleteProduct = useDeleteProduct();
   const [toDelete, setToDelete] = useState<ProductType | null>(null);
@@ -42,19 +44,17 @@ export function ProductsTable({ products }: ProductsTableProps) {
   };
 
   const liveMessage = debouncedSearch
-    ? filtered.length === 0
-      ? `No products match "${debouncedSearch}"`
-      : `${filtered.length} product${filtered.length === 1 ? "" : "s"} found`
+    ? t("liveResults", { count: filtered.length })
     : "";
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden p-4 md:mx-auto md:w-fit md:min-w-212.5">
       <div className="mb-6">
         <h1 className="text-center text-2xl font-bold text-stone-900">
-          Products
+          {t("pageTitle")}
         </h1>
         <nav
-          aria-label="Products actions"
+          aria-label={t("tableAriaLabel")}
           className="my-5 flex items-center justify-between gap-3"
         >
           <ProductSearch value={search} onChange={setSearch} />
@@ -62,7 +62,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             href="/products/new"
             className="shrink-0 rounded-lg border border-violet-700 bg-violet-700 px-3 py-1.5 text-sm font-semibold text-white uppercase transition duration-300 hover:bg-violet-800"
           >
-            New Product
+            {t("newProductButton")}
           </Link>
         </nav>
       </div>
@@ -77,18 +77,18 @@ export function ProductsTable({ products }: ProductsTableProps) {
       </div>
 
       <div className="overflow-x-auto overflow-y-auto rounded-lg border border-slate-200 bg-white">
-        <table aria-label="Products" className="w-full text-sm">
+        <table aria-label={t("tableAriaLabel")} className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold tracking-wide text-stone-500 uppercase">
             <tr>
               <th scope="col" aria-label="Image" className="w-14 px-4 py-3" />
               <th scope="col" className="px-4 py-3">
-                Name
+                {t("columnName")}
               </th>
               <th scope="col" className="px-4 py-3">
-                Category
+                {t("columnCategory")}
               </th>
               <th scope="col" className="px-4 py-3">
-                Unit Price
+                {t("columnUnitPrice")}
               </th>
               <th scope="col" aria-label="Actions" className="px-4 py-3" />
             </tr>
@@ -101,15 +101,15 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   className="px-4 py-10 text-center text-stone-400"
                 >
                   {debouncedSearch ? (
-                    <>No products match &ldquo;{debouncedSearch}&rdquo;.</>
+                    t("emptyNoMatch", { search: debouncedSearch })
                   ) : (
                     <>
-                      No products yet.{" "}
+                      {t("emptyNoProducts")}{" "}
                       <Link
                         href="/products/new"
                         className="text-violet-600 hover:underline"
                       >
-                        Add one
+                        {t("emptyAddOne")}
                       </Link>
                       .
                     </>
@@ -154,23 +154,23 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   <div className="hidden items-center gap-2 sm:flex">
                     <Link
                       href={`/products/${product.id}/edit`}
-                      aria-label={`Edit ${product.name}`}
+                      aria-label={t("editAriaLabel", { name: product.name })}
                       className="rounded-lg border border-slate-400 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase transition duration-300 hover:border-slate-500 hover:text-slate-500"
                     >
-                      Edit
+                      {t("editButton")}
                     </Link>
                     <button
                       onClick={() => setToDelete(product)}
-                      aria-label={`Delete ${product.name}`}
+                      aria-label={t("deleteAriaLabel", { name: product.name })}
                       className="cursor-pointer rounded-lg border border-rose-400 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-400 uppercase transition duration-300 hover:border-rose-500 hover:text-rose-500"
                     >
-                      Delete
+                      {t("deleteButton")}
                     </button>
                   </div>
                   <div className="flex items-center gap-4 sm:hidden">
                     <Link
                       href={`/products/${product.id}/edit`}
-                      aria-label={`Edit ${product.name}`}
+                      aria-label={t("editAriaLabel", { name: product.name })}
                     >
                       <PencilIcon
                         aria-hidden="true"
@@ -178,7 +178,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                       />
                     </Link>
                     <button
-                      aria-label={`Delete ${product.name}`}
+                      aria-label={t("deleteAriaLabel", { name: product.name })}
                       onClick={() => setToDelete(product)}
                       className="cursor-pointer"
                     >
@@ -197,8 +197,8 @@ export function ProductsTable({ products }: ProductsTableProps) {
 
       <ConfirmModal
         isOpen={!!toDelete}
-        title="Delete product"
-        message={`"${toDelete?.name}" will be permanently removed.`}
+        title={t("confirmDeleteTitle")}
+        message={t("confirmDeleteMessage", { name: toDelete?.name ?? "" })}
         onConfirm={handleConfirmDelete}
         onCancel={() => setToDelete(null)}
       />
