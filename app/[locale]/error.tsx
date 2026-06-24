@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 interface ErrorProps {
@@ -9,6 +10,8 @@ interface ErrorProps {
 }
 
 export default function GlobalError({ error, reset }: ErrorProps) {
+  const t = useTranslations("common");
+
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -21,17 +24,15 @@ export default function GlobalError({ error, reset }: ErrorProps) {
       />
       <div>
         <h1 className="text-lg font-semibold text-stone-800">
-          Something went wrong
+          {t("somethingWentWrong")}
         </h1>
-        <p className="mt-1 text-sm text-stone-500">
-          An unexpected error occurred. Please try again.
-        </p>
+        <p className="mt-1 text-sm text-stone-500">{t("unexpectedError")}</p>
       </div>
       <button
         onClick={reset}
         className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
       >
-        Try again
+        {t("tryAgain")}
       </button>
     </main>
   );

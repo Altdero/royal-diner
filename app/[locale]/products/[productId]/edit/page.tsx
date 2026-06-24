@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { prisma } from "@/src/lib/prisma";
 import { ProductForm } from "@/components/products/ProductForm";
@@ -6,27 +7,29 @@ import { ProductForm } from "@/components/products/ProductForm";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ locale: string; productId: string }>;
 }): Promise<Metadata> {
-  const { productId } = await params;
+  const { locale, productId } = await params;
+  const t = await getTranslations({ locale, namespace: "products" });
   const product = await prisma.product.findUnique({
     where: { id: productId },
     select: { name: true },
   });
   return {
-    title: product ? `Edit ${product.name}` : "Edit Product",
-    description: product
-      ? `Edit the details for ${product.name}.`
-      : "Edit a product in the catalog.",
+    title: product
+      ? t("editProductTitle", { name: product.name })
+      : t("newProductTitle"),
+    description: t("editProductDescription"),
   };
 }
 
 export default async function EditProductPage({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ locale: string; productId: string }>;
 }) {
-  const { productId } = await params;
+  const { locale, productId } = await params;
+  setRequestLocale(locale);
 
   const [product, categories] = await Promise.all([
     prisma.product.findUnique({
@@ -51,7 +54,6 @@ export default async function EditProductPage({
   return (
     <div className="mx-auto w-full max-w-3xl">
       <ProductForm
-        title="Edit Product"
         productId={productId}
         product={product}
         categories={categories}
