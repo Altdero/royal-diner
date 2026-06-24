@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/src/i18n/navigation";
 import {
   ArchiveBoxIcon,
   FireIcon,
@@ -9,15 +9,16 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 
-const links = [
-  { href: "/order", label: "New Order", icon: PencilSquareIcon },
-  { href: "/orders", label: "Orders", icon: ArchiveBoxIcon },
-  { href: "/kitchen", label: "Kitchen", icon: FireIcon },
-  { href: "/products", label: "Products", icon: ListBulletIcon },
-];
-
 export function NavLinks() {
+  const t = useTranslations("nav");
   const pathname = usePathname();
+
+  const links = [
+    { href: "/order" as const, label: t("newOrder"), icon: PencilSquareIcon },
+    { href: "/orders" as const, label: t("orders"), icon: ArchiveBoxIcon },
+    { href: "/kitchen" as const, label: t("kitchen"), icon: FireIcon },
+    { href: "/products" as const, label: t("products"), icon: ListBulletIcon },
+  ];
 
   return (
     <ul className="flex items-center gap-1">
