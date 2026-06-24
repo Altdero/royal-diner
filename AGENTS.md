@@ -66,7 +66,7 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 - **State:** Zustand v5
 - **Images:** next-cloudinary (CldUploadWidget, preset hardcoded) + public assets (fallbacks)
 - **UI feedback:** sonner
-- **Icons:** react-icons
+- **Icons:** @heroicons/react
 - **API docs:** swagger-jsdoc + swagger-ui-react (served at `/docs`)
 - **Testing:** Jest + ts-jest
 - **Linting:** ESLint 9 (flat config)
@@ -121,7 +121,8 @@ prisma/
 └── migrations/
 
 src/
-├── constants/                        # App-wide constants
+├── constants/
+│   └── orderStatuses.ts              # ORDER_STATUSES constant
 ├── hooks/                            # Custom React hooks
 │   ├── useCategories.ts
 │   ├── useProducts.ts
@@ -137,7 +138,8 @@ src/
 │   │   └── orderSchema.ts
 │   └── utils/
 │       ├── formatCurrency.ts
-│       └── getImagePath.ts
+│       ├── getImagePath.ts
+│       └── isPrismaError.ts          # Duck-type check for Prisma error codes
 ├── providers/
 │   └── query.provider.tsx            # TanStack Query client provider
 ├── store/
