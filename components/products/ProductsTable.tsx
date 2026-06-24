@@ -126,7 +126,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                 <td className="min-w-17.5 px-4 py-3">
                   {product.image ? (
                     <Image
-                      src={getImagePath(product.image)}
+                      src={getImagePath(product.image)!}
                       alt={product.name}
                       width={40}
                       height={40}

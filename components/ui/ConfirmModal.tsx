@@ -54,6 +54,7 @@ export function ConfirmModal({
   return (
     <dialog
       ref={dialogRef}
+      aria-modal="true"
       aria-labelledby="confirm-dialog-title"
       aria-describedby="confirm-dialog-desc"
       onClick={handleBackdropClick}

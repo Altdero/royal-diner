@@ -1,6 +1,7 @@
 import { ZodError } from "zod";
 import { prisma } from "@/src/lib/prisma";
 import { updateProductSchema } from "@/src/lib/schemas/productSchema";
+import { isPrismaError } from "@/src/lib/utils/isPrismaError";
 
 const include = { category: { select: { id: true, name: true } } };
 
@@ -74,6 +75,8 @@ const include = { category: { select: { id: true, name: true } } };
  *         description: Deleted successfully
  *       404:
  *         description: Product not found
+ *       409:
+ *         description: Product is referenced by existing orders
  */
 export async function GET(
   _: Request,
@@ -108,6 +111,9 @@ export async function PUT(
     if (error instanceof ZodError) {
       return Response.json({ error: error.issues }, { status: 400 });
     }
+    if (isPrismaError(error, "P2025")) {
+      return Response.json({ error: "Product not found" }, { status: 404 });
+    }
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -116,7 +122,20 @@ export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ productId: string }> }
 ) {
-  const { productId } = await params;
-  await prisma.product.delete({ where: { id: productId } });
-  return new Response(null, { status: 204 });
+  try {
+    const { productId } = await params;
+    await prisma.product.delete({ where: { id: productId } });
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    if (isPrismaError(error, "P2025")) {
+      return Response.json({ error: "Product not found" }, { status: 404 });
+    }
+    if (isPrismaError(error, "P2003")) {
+      return Response.json(
+        { error: "Product is referenced by existing orders" },
+        { status: 409 }
+      );
+    }
+    return Response.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

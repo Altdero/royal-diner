@@ -1,6 +1,7 @@
 import { ZodError } from "zod";
 import { prisma } from "@/src/lib/prisma";
 import { updateOrderStatusSchema } from "@/src/lib/schemas/orderSchema";
+import { isPrismaError } from "@/src/lib/utils/isPrismaError";
 
 /**
  * @swagger
@@ -60,6 +61,9 @@ export async function PATCH(
   } catch (error) {
     if (error instanceof ZodError) {
       return Response.json({ error: error.issues }, { status: 400 });
+    }
+    if (isPrismaError(error, "P2025")) {
+      return Response.json({ error: "Order not found" }, { status: 404 });
     }
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }

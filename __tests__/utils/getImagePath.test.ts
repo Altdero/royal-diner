@@ -1,16 +1,16 @@
 import { getImagePath } from "@/src/lib/utils/getImagePath";
 
 describe("getImagePath", () => {
-  it("returns the placeholder when image is null", () => {
-    expect(getImagePath(null)).toBe("/products/placeholder.jpg");
+  it("returns null when image is null", () => {
+    expect(getImagePath(null)).toBeNull();
   });
 
-  it("returns the placeholder when image is undefined", () => {
-    expect(getImagePath(undefined)).toBe("/products/placeholder.jpg");
+  it("returns null when image is undefined", () => {
+    expect(getImagePath(undefined)).toBeNull();
   });
 
-  it("returns the placeholder when image is an empty string", () => {
-    expect(getImagePath("")).toBe("/products/placeholder.jpg");
+  it("returns null when image is an empty string", () => {
+    expect(getImagePath("")).toBeNull();
   });
 
   it("returns a Cloudinary URL as-is", () => {

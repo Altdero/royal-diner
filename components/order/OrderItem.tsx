@@ -23,7 +23,7 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
       <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-slate-100">
         {item.image ? (
           <Image
-            src={getImagePath(item.image)}
+            src={getImagePath(item.image)!}
             alt={item.name}
             fill
             sizes="44px"

@@ -21,7 +21,7 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
       <div className="relative h-28 shrink-0 bg-slate-100 sm:h-32">
         {product.image ? (
           <Image
-            src={getImagePath(product.image)}
+            src={getImagePath(product.image)!}
             alt={product.name}
             fill
             sizes="auto"
