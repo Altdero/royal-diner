@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "siteName": "Royal Diner",
+    "titleTemplate": "%s | Royal Diner",
+    "defaultTitle": "Royal Diner",
+    "defaultDescription": "Sistema de gestão de pedidos"
+  },
+  "common": {
+    "skipToMainContent": "Ir para o conteúdo principal",
+    "somethingWentWrong": "Algo deu errado",
+    "unexpectedError": "Ocorreu um erro inesperado. Por favor, tente novamente.",
+    "tryAgain": "Tentar novamente",
+    "notFound404": "404",
+    "pageNotFound": "Página não encontrada",
+    "goToOrders": "Ir para pedidos",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "uploading": "Enviando…"
+  },
+  "nav": {
+    "ariaLabel": "Navegação principal",
+    "brandName": "Royal Diner",
+    "newOrder": "Novo Pedido",
+    "orders": "Pedidos",
+    "kitchen": "Cozinha",
+    "products": "Produtos",
+    "switchLanguage": "Mudar idioma",
+    "currentLanguage": "Idioma atual: {locale}"
+  },
+  "kitchen": {
+    "pageTitle": "Cozinha",
+    "pageDescription": "Tela da cozinha com pedidos pendentes.",
+    "loadingAriaLabel": "Carregando pedidos da cozinha",
+    "emptyState": "Nenhum pedido pendente. Cozinha liberada!",
+    "orderAriaLabel": "Pedido #{orderNumber}, {clientName}",
+    "markReadyAriaLabel": "Marcar pedido #{orderNumber} como pronto",
+    "markAsReady": "Marcar como pronto",
+    "updating": "Atualizando…",
+    "toastMarkedReady": "Pedido marcado como pronto",
+    "toastFailedUpdate": "Falha ao atualizar o status do pedido"
+  },
+  "order": {
+    "pageTitle": "Novo Pedido",
+    "pageDescription": "Crie e envie um novo pedido.",
+    "sidebar": {
+      "filterAriaLabel": "Filtrar por categoria",
+      "navAriaLabel": "Navegação de categorias",
+      "allCategory": "Tudo",
+      "expandMenu": "Expandir menu",
+      "collapseMenu": "Recolher menu"
+    },
+    "search": {
+      "ariaLabel": "Pesquisar produtos",
+      "placeholder": "Pesquisar produtos…"
+    },
+    "grid": {
+      "loadingAriaLabel": "Carregando produtos",
+      "emptyState": "Nenhum produto encontrado."
+    },
+    "card": {
+      "addAriaLabel": "Adicionar {name} ao pedido, {price}"
+    },
+    "summary": {
+      "asideAriaLabel": "Resumo do pedido",
+      "heading": "Resumo do pedido",
+      "itemCountAriaLabel": "{count} itens no pedido",
+      "customerNameLabel": "Nome do cliente",
+      "customerNamePlaceholder": "Digite o nome do cliente",
+      "emptyCart": "Toque em um produto para adicioná-lo aqui.",
+      "totalLabel": "Total",
+      "placeOrder": "Fazer Pedido",
+      "placingOrder": "Enviando…"
+    },
+    "item": {
+      "decreaseAriaLabel": "Diminuir quantidade de {name}",
+      "increaseAriaLabel": "Aumentar quantidade de {name}",
+      "removeAriaLabel": "Remover {name} do pedido"
+    },
+    "toastPlaced": "Pedido realizado com sucesso",
+    "toastFailedPlace": "Falha ao realizar o pedido"
+  },
+  "orders": {
+    "pageTitle": "Pedidos",
+    "pageDescription": "Acompanhe o progresso dos pedidos.",
+    "tabNavAriaLabel": "Painéis de pedidos",
+    "panelPendingTitle": "A preparar",
+    "panelReadyTitle": "Prontos",
+    "orderCountAriaLabel": "{count} pedidos",
+    "emptyPending": "Nenhum pedido para preparar",
+    "emptyReady": "Nenhum pedido pronto ainda",
+    "orderCardAriaLabel": "Pedido #{orderNumber}, {clientName}"
+  },
+  "products": {
+    "pageTitle": "Produtos",
+    "pageDescription": "Gerencie o catálogo de produtos.",
+    "newProductTitle": "Novo produto",
+    "newProductDescription": "Adicione um novo produto ao catálogo.",
+    "editProductTitle": "Editar {name}",
+    "editProductDescription": "Editar detalhes do produto.",
+    "newProductButton": "Novo produto",
+    "tableAriaLabel": "Produtos",
+    "columnName": "Nome",
+    "columnCategory": "Categoria",
+    "columnUnitPrice": "Preço unitário",
+    "emptyNoProducts": "Nenhum produto ainda.",
+    "emptyAddOne": "Adicionar um",
+    "emptyNoMatch": "Nenhum produto corresponde a \"{search}\".",
+    "liveResults": "{count, plural, =0 {Nenhum produto corresponde} =1 {# produto encontrado} other {# produtos encontrados}}",
+    "editAriaLabel": "Editar {name}",
+    "deleteAriaLabel": "Excluir {name}",
+    "editButton": "Editar",
+    "deleteButton": "Excluir",
+    "confirmDeleteTitle": "Excluir produto",
+    "confirmDeleteMessage": "\"{name}\" será removido permanentemente.",
+    "search": {
+      "ariaLabel": "Pesquisar produtos",
+      "placeholder": "Pesquisar produtos…",
+      "clearAriaLabel": "Limpar pesquisa"
+    },
+    "form": {
+      "breadcrumbBack": "Produtos",
+      "nameLabel": "Nome",
+      "namePlaceholder": "ex. Espresso",
+      "priceLabel": "Preço unitário",
+      "pricePlaceholder": "0.00",
+      "categoryLabel": "Categoria",
+      "categoryPlaceholder": "Selecione uma categoria",
+      "imageLabel": "Imagem",
+      "imageUploadAriaLabel": "Enviar imagem do produto",
+      "imagePreviewAlt": "Pré-visualização do produto",
+      "failedImageUpload": "Falha ao enviar a imagem. Por favor, tente novamente."
+    },
+    "toastCreated": "Produto criado",
+    "toastFailedCreate": "Falha ao criar o produto",
+    "toastUpdated": "Produto atualizado",
+    "toastFailedUpdate": "Falha ao atualizar o produto",
+    "toastDeleted": "Produto excluído",
+    "toastFailedDelete": "Falha ao excluir o produto"
+  }
+}
