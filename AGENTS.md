@@ -60,10 +60,11 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5 (strict)
 - **Styling:** Tailwind CSS 4
 - **Package manager:** yarn
-- **Database:** PostgreSQL on Neon via Prisma 7
+- **Database:** PostgreSQL via Prisma 7 (any managed provider — Neon, Supabase, etc.)
 - **Data fetching:** TanStack Query v5
 - **Forms:** react-hook-form + @hookform/resolvers + Zod v4
 - **State:** Zustand v5
+- **i18n:** next-intl v4 (locales: en, es, pt, fr; default: en; locale prefix in URL)
 - **Images:** next-cloudinary (CldUploadWidget, preset hardcoded) + public assets (fallbacks)
 - **UI feedback:** sonner
 - **Icons:** @heroicons/react
@@ -79,19 +80,23 @@ Reference `package.json` for exact versions. Always consult `node_modules/next/d
 
 ```
 app/
-├── layout.tsx                        # Root layout (QueryProvider + Toaster)
+├── layout.tsx                        # Minimal passthrough — real layout is in [locale]/layout.tsx
 ├── globals.css
-├── page.tsx                          # Redirects to /orders
+└── api/
+    ├── categories/route.ts           # GET /api/categories
+    ├── products/
+    │   ├── route.ts                  # GET, POST /api/products
+    │   └── [productId]/route.ts      # GET, PUT, DELETE /api/products/:id
+    ├── orders/
+    │   ├── route.ts                  # GET, POST /api/orders
+    │   └── [orderId]/route.ts        # PATCH /api/orders/:id
+    └── docs/route.ts                 # GET /api/docs — OpenAPI JSON spec
+
+app/[locale]/                         # All routable pages live under the locale segment
+├── layout.tsx                        # Root layout: <html lang>, providers, Nav
+├── page.tsx                          # Redirects to /order
 ├── not-found.tsx
-├── api/
-│   ├── categories/route.ts           # GET /api/categories
-│   ├── products/
-│   │   ├── route.ts                  # GET, POST /api/products
-│   │   └── [productId]/route.ts      # GET, PUT, DELETE /api/products/:id
-│   ├── orders/
-│   │   ├── route.ts                  # GET, POST /api/orders
-│   │   └── [orderId]/route.ts        # PATCH /api/orders/:id
-│   └── docs/route.ts                 # GET /api/docs — OpenAPI JSON spec
+├── error.tsx
 ├── docs/
 │   └── page.tsx                      # Swagger UI at /docs
 ├── order/
@@ -101,19 +106,29 @@ app/
 ├── kitchen/
 │   └── page.tsx                      # Kitchen view — one card per pending order
 └── products/
-    ├── page.tsx                      # Product catalog
+    ├── (home)/
+    │   └── page.tsx                  # Product catalog
     ├── new/
     │   └── page.tsx                  # Add product form
     └── [productId]/
         └── edit/
             └── page.tsx              # Edit product form
 
+middleware.ts                         # next-intl locale detection and redirect
+
+messages/                             # Translation files (one per locale)
+├── en.json
+├── es.json
+├── pt.json
+└── fr.json
+
 components/
 ├── ui/                               # Shared UI primitives
 ├── order/                            # Order module components
 ├── orders/                           # Orders listing components
 ├── kitchen/                          # Kitchen components
-└── products/                         # Product catalog and form components
+├── products/                         # Product catalog and form components
+└── LocaleSwitcher.tsx                # Language switcher (select in Nav)
 
 prisma/
 ├── schema.prisma
@@ -129,6 +144,10 @@ src/
 │   ├── useOrders.ts
 │   ├── useProductMutations.ts
 │   └── useOrderMutations.ts
+├── i18n/
+│   ├── routing.ts                    # defineRouting — locales, defaultLocale
+│   ├── request.ts                    # getRequestConfig — loads messages per request
+│   └── navigation.ts                 # createNavigation exports (Link, useRouter, etc.)
 ├── lib/
 │   ├── prisma.ts                     # Prisma client singleton
 │   ├── swagger.ts                    # OpenAPI spec definition
@@ -188,6 +207,11 @@ Define schemas in `src/lib/schemas/`, infer types with `z.infer<>`, re-export fr
 **Client-side filtering for bounded datasets**
 When a Server Component already loads a complete, bounded dataset (e.g. the product catalog), prefer in-memory `.filter()` over URL `searchParams` + Prisma re-query or a TanStack Query re-fetch. For this app the product count is small and staff-only, so filtering is instant and adds no server load. Use URL-based or TanStack search only when the dataset requires pagination or is too large to load upfront.
 
+**i18n with next-intl — locale prefix in URL**
+All routes live under `app/[locale]/`. The middleware detects the browser's `Accept-Language` header on the first visit and redirects to the matching locale prefix (e.g. `/en/orders`). Supported locales and the default (`en`) are defined in `src/i18n/routing.ts`.
+
+Use `getTranslations` (async, Server Components) and `useTranslations` (hook, Client Components). Never use `next/link` or `next/navigation` directly — import `Link`, `useRouter`, `usePathname`, and `redirect` from `@/src/i18n/navigation` so they carry the active locale automatically. Call `setRequestLocale(locale)` at the top of every Server Component page to enable static rendering. Translation keys live in `messages/*.json`; all locale files must have identical keys — the `__tests__/i18n/messages.test.ts` suite enforces this.
+
 **Cloudinary for uploaded images, public/ for fallbacks**
 Product images are uploaded by the user via next-cloudinary (CldUploadWidget). Images in `public/products/` are default fallbacks rendered by `getImagePath` when a product has no Cloudinary URL — they are not selectable from the UI. Category icons or decoration images are static files in `public/`.
 
@@ -196,13 +220,14 @@ The upload preset is hardcoded in `ImagePicker.tsx`. `ImagePicker` is imported d
 ## Environment Variables
 
 ```
-DATABASE_URL=                         # Neon pooled connection string — used by the app at runtime
-DIRECT_URL=                           # Neon direct (non-pooled) connection string — used by Prisma CLI for migrations
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=    # Safe to expose — embedded in every Cloudinary URL
+DATABASE_URL=                              # Pooled connection string — used by the app at runtime
+DIRECT_URL=                               # Direct (non-pooled) connection string — used by Prisma CLI for migrations
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=        # Safe to expose — embedded in every Cloudinary URL
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=     # Safe to expose — Cloudinary unsigned upload preset name
 ```
 
-`DATABASE_URL` points to the Neon **pooler** endpoint (e.g. `*-pooler.*.neon.tech`).
-`DIRECT_URL` points to the Neon **direct** endpoint (no `-pooler`). Required by `prisma migrate`.
+`DATABASE_URL` must point to the **pooled** endpoint of your provider (connection pooling is required at runtime).
+`DIRECT_URL` must point to the **direct** (non-pooled) endpoint. Required by `prisma migrate`.
 Never add `NEXT_PUBLIC_` to Cloudinary API key or secret.
 
 ## Development Workflow
@@ -251,6 +276,13 @@ yarn prepare      # Set up Husky git hooks
 - react-hook-form for all form state
 - Zod schemas for validation via `@hookform/resolvers/zod`
 - Schemas colocated in `src/lib/schemas/`
+
+**Translations**
+
+- Server Components: `const t = await getTranslations("namespace")`
+- Client Components and hooks: `const t = useTranslations("namespace")`
+- Never import from `next/link` or `next/navigation` — use `@/src/i18n/navigation` instead
+- All new translation keys must be added to every locale file (`messages/en.json`, `es.json`, `pt.json`, `fr.json`) to keep them in sync
 
 **Toast Notifications**
 
