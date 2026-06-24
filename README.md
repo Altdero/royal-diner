@@ -6,21 +6,22 @@ A diner order management system built with Next.js 16, React 19, and PostgreSQL.
 
 ## Modules
 
-| Module   | Route       | Description                                    |
-| -------- | ----------- | ---------------------------------------------- |
-| Order    | `/order`    | Waiter builds and submits a new customer order |
-| Orders   | `/orders`   | Front-of-house tracks pending and ready orders |
-| Kitchen  | `/kitchen`  | Kitchen display — mark orders as ready         |
-| Products | `/products` | Manage the menu catalog                        |
+| Module   | Route                | Description                                    |
+| -------- | -------------------- | ---------------------------------------------- |
+| Order    | `/[locale]/order`    | Waiter builds and submits a new customer order |
+| Orders   | `/[locale]/orders`   | Front-of-house tracks pending and ready orders |
+| Kitchen  | `/[locale]/kitchen`  | Kitchen display — mark orders as ready         |
+| Products | `/[locale]/products` | Manage the menu catalog                        |
 
 ## Stack
 
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5 (strict)
 - **Styling:** Tailwind CSS 4
-- **Database:** PostgreSQL on Neon via Prisma 7
+- **Database:** PostgreSQL via Prisma 7 (any managed provider — Neon, Supabase, etc.)
 - **Data fetching:** TanStack Query v5
 - **Forms:** react-hook-form + Zod v4
 - **State:** Zustand v5
+- **i18n:** next-intl v4 (en, es, pt, fr)
 - **Images:** next-cloudinary + public assets
 - **API docs:** swagger-jsdoc + swagger-ui-react
 - **Testing:** Jest + ts-jest
@@ -43,9 +44,10 @@ cp .env.example .env
 Fill in `.env`:
 
 ```
-DATABASE_URL=       # Neon pooled connection string
-DIRECT_URL=         # Neon direct connection string (for migrations)
+DATABASE_URL=       # Pooled connection string
+DIRECT_URL=         # Direct connection string (for migrations)
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=
 ```
 
 ### 3. Run database migrations
@@ -68,7 +70,7 @@ Also copy the product images into `public/products/` — see the image mapping i
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — you will be redirected to your browser's preferred language automatically.
 
 ## API Docs
 
