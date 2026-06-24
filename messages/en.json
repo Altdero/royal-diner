@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "siteName": "Royal Diner",
+    "titleTemplate": "%s | Royal Diner",
+    "defaultTitle": "Royal Diner",
+    "defaultDescription": "Diner order management system"
+  },
+  "common": {
+    "skipToMainContent": "Skip to main content",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try again",
+    "notFound404": "404",
+    "pageNotFound": "Page not found",
+    "goToOrders": "Go to orders",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "uploading": "Uploading…"
+  },
+  "nav": {
+    "ariaLabel": "Main navigation",
+    "brandName": "Royal Diner",
+    "newOrder": "New Order",
+    "orders": "Orders",
+    "kitchen": "Kitchen",
+    "products": "Products",
+    "switchLanguage": "Switch language",
+    "currentLanguage": "Current language: {locale}"
+  },
+  "kitchen": {
+    "pageTitle": "Kitchen",
+    "pageDescription": "Kitchen display showing pending orders.",
+    "loadingAriaLabel": "Loading kitchen orders",
+    "emptyState": "No pending orders. Kitchen is clear!",
+    "orderAriaLabel": "Order #{orderNumber}, {clientName}",
+    "markReadyAriaLabel": "Mark order #{orderNumber} as ready",
+    "markAsReady": "Mark as Ready",
+    "updating": "Updating…",
+    "toastMarkedReady": "Order marked as ready",
+    "toastFailedUpdate": "Failed to update order status"
+  },
+  "order": {
+    "pageTitle": "New Order",
+    "pageDescription": "Build and submit a new customer order.",
+    "sidebar": {
+      "filterAriaLabel": "Filter by category",
+      "navAriaLabel": "Category navigation",
+      "allCategory": "All",
+      "expandMenu": "Expand menu",
+      "collapseMenu": "Collapse menu"
+    },
+    "search": {
+      "ariaLabel": "Search products",
+      "placeholder": "Search products…"
+    },
+    "grid": {
+      "loadingAriaLabel": "Loading products",
+      "emptyState": "No products found."
+    },
+    "card": {
+      "addAriaLabel": "Add {name} to order, {price}"
+    },
+    "summary": {
+      "asideAriaLabel": "Order summary",
+      "heading": "Order Summary",
+      "itemCountAriaLabel": "{count} items in order",
+      "customerNameLabel": "Customer Name",
+      "customerNamePlaceholder": "Enter customer name",
+      "emptyCart": "Tap a product to add it here.",
+      "totalLabel": "Total",
+      "placeOrder": "Place Order",
+      "placingOrder": "Placing Order…"
+    },
+    "item": {
+      "decreaseAriaLabel": "Decrease quantity of {name}",
+      "increaseAriaLabel": "Increase quantity of {name}",
+      "removeAriaLabel": "Remove {name} from order"
+    },
+    "toastPlaced": "Order placed successfully",
+    "toastFailedPlace": "Failed to place order"
+  },
+  "orders": {
+    "pageTitle": "Orders",
+    "pageDescription": "Track order progress across pending and ready states.",
+    "tabNavAriaLabel": "Order panels",
+    "panelPendingTitle": "To Prepare",
+    "panelReadyTitle": "Ready",
+    "orderCountAriaLabel": "{count} orders",
+    "emptyPending": "No orders to prepare",
+    "emptyReady": "No orders ready yet",
+    "orderCardAriaLabel": "Order #{orderNumber}, {clientName}"
+  },
+  "products": {
+    "pageTitle": "Products",
+    "pageDescription": "Manage the product catalog.",
+    "newProductTitle": "New Product",
+    "newProductDescription": "Add a new product to the catalog.",
+    "editProductTitle": "Edit {name}",
+    "editProductDescription": "Edit product details.",
+    "newProductButton": "New Product",
+    "tableAriaLabel": "Products",
+    "columnName": "Name",
+    "columnCategory": "Category",
+    "columnUnitPrice": "Unit Price",
+    "emptyNoProducts": "No products yet.",
+    "emptyAddOne": "Add one",
+    "emptyNoMatch": "No products match \"{search}\".",
+    "liveResults": "{count, plural, =0 {No products match} =1 {# product found} other {# products found}}",
+    "editAriaLabel": "Edit {name}",
+    "deleteAriaLabel": "Delete {name}",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "confirmDeleteTitle": "Delete product",
+    "confirmDeleteMessage": "\"{name}\" will be permanently removed.",
+    "search": {
+      "ariaLabel": "Search products",
+      "placeholder": "Search products…",
+      "clearAriaLabel": "Clear search"
+    },
+    "form": {
+      "breadcrumbBack": "Products",
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g. Espresso",
+      "priceLabel": "Unit Price",
+      "pricePlaceholder": "0.00",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select a category",
+      "imageLabel": "Image",
+      "imageUploadAriaLabel": "Upload product image",
+      "imagePreviewAlt": "Product preview",
+      "failedImageUpload": "Failed to upload image. Please try again."
+    },
+    "toastCreated": "Product created",
+    "toastFailedCreate": "Failed to create product",
+    "toastUpdated": "Product updated",
+    "toastFailedUpdate": "Failed to update product",
+    "toastDeleted": "Product deleted",
+    "toastFailedDelete": "Failed to delete product"
+  }
+}
