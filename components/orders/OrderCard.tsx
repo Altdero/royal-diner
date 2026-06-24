@@ -1,5 +1,3 @@
-"use client";
-
 import type { OrderType } from "@/src/types";
 
 interface OrderCardProps {
