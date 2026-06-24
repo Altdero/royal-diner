@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { FireIcon } from "@heroicons/react/24/outline";
 import { useOrders } from "@/src/hooks/useOrders";
 import { useUpdateOrderStatus } from "@/src/hooks/useOrderMutations";
 import { KitchenCard } from "./KitchenCard";
 
 export function KitchenPage() {
+  const t = useTranslations("kitchen");
   const { data: orders, isLoading } = useOrders("PENDING");
   const updateStatus = useUpdateOrderStatus();
 
@@ -17,7 +19,7 @@ export function KitchenPage() {
     return (
       <div
         role="status"
-        aria-label="Loading kitchen orders"
+        aria-label={t("loadingAriaLabel")}
         className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         {Array.from({ length: 6 }).map((_, i) => (
@@ -52,7 +54,7 @@ export function KitchenPage() {
         className="flex flex-1 flex-col items-center justify-center gap-3 text-slate-400"
       >
         <FireIcon aria-hidden="true" className="size-12 opacity-40" />
-        <p className="text-sm">No pending orders. Kitchen is clear!</p>
+        <p className="text-sm">{t("emptyState")}</p>
       </div>
     );
   }

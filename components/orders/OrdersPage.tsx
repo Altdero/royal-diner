@@ -1,18 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useOrders } from "@/src/hooks/useOrders";
 import { OrdersPanel, ordersPanelConfig } from "./OrdersPanel";
 
 const TAB_KEYS = ["pending", "ready"] as const;
 type TabKey = (typeof TAB_KEYS)[number];
 
-const TAB_LABELS: Record<TabKey, string> = {
-  pending: "To Prepare",
-  ready: "Ready",
-};
-
 export function OrdersPage() {
+  const t = useTranslations("orders");
   const [activeTab, setActiveTab] = useState<TabKey>("pending");
 
   const { data: pendingOrders = [] } = useOrders("PENDING");
@@ -23,10 +20,18 @@ export function OrdersPage() {
     ready: readyOrders,
   };
 
+  const tabLabels: Record<TabKey, string> = {
+    pending: t("panelPendingTitle"),
+    ready: t("panelReadyTitle"),
+  };
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Mobile tab switcher */}
-      <nav aria-label="Order panels" className="flex shrink-0 lg:hidden">
+      <nav
+        aria-label={t("tabNavAriaLabel")}
+        className="flex shrink-0 lg:hidden"
+      >
         {TAB_KEYS.map((key) => {
           const c = ordersPanelConfig[key];
           const Icon = c.icon;
@@ -44,7 +49,7 @@ export function OrdersPage() {
               }`}
             >
               <Icon aria-hidden="true" className="size-4" />
-              {TAB_LABELS[key]}
+              {tabLabels[key]}
               <span
                 className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold text-white ${c.badgeBg}`}
               >
@@ -65,7 +70,7 @@ export function OrdersPage() {
           }
         >
           <OrdersPanel
-            title="To Prepare"
+            title={t("panelPendingTitle")}
             variant="pending"
             orders={pendingOrders}
           />
@@ -77,7 +82,11 @@ export function OrdersPage() {
               : "hidden lg:flex lg:flex-1"
           }
         >
-          <OrdersPanel title="Ready" variant="ready" orders={readyOrders} />
+          <OrdersPanel
+            title={t("panelReadyTitle")}
+            variant="ready"
+            orders={readyOrders}
+          />
         </div>
       </div>
     </div>

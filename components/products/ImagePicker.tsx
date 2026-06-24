@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { CameraIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import { getImagePath } from "@/src/lib/utils/getImagePath";
 
@@ -11,6 +12,7 @@ interface ImagePickerProps {
 }
 
 export function ImagePicker({ currentUrl, onFileSelect }: ImagePickerProps) {
+  const t = useTranslations("products.form");
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -37,7 +39,7 @@ export function ImagePicker({ currentUrl, onFileSelect }: ImagePickerProps) {
         htmlFor="product-image"
         className="text-sm font-medium text-stone-700"
       >
-        Image
+        {t("imageLabel")}
       </label>
 
       <input
@@ -53,13 +55,13 @@ export function ImagePicker({ currentUrl, onFileSelect }: ImagePickerProps) {
         <div className="flex justify-center overflow-hidden rounded-lg border border-slate-300 bg-slate-100">
           <button
             type="button"
-            aria-label="Upload product image"
+            aria-label={t("imageUploadAriaLabel")}
             onClick={() => inputRef.current?.click()}
             className="group relative cursor-pointer"
           >
             <Image
               src={displayUrl}
-              alt="Product preview"
+              alt={t("imagePreviewAlt")}
               width={80}
               height={80}
               className="size-25 rounded-lg object-cover"
@@ -73,7 +75,7 @@ export function ImagePicker({ currentUrl, onFileSelect }: ImagePickerProps) {
         <div className="flex justify-center overflow-hidden rounded-lg border border-slate-300 bg-slate-100">
           <button
             type="button"
-            aria-label="Upload product image"
+            aria-label={t("imageUploadAriaLabel")}
             onClick={() => inputRef.current?.click()}
             className="group relative cursor-pointer"
           >

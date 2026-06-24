@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { PhotoIcon, PlusIcon } from "@heroicons/react/24/outline";
 import type { ProductType } from "@/src/types";
 import { formatCurrency } from "@/src/lib/utils/formatCurrency";
@@ -12,10 +13,15 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onAdd }: ProductCardProps) {
+  const t = useTranslations("order.card");
+
   return (
     <button
       onClick={() => onAdd(product)}
-      aria-label={`Add ${product.name} to order, ${formatCurrency(product.price)}`}
+      aria-label={t("addAriaLabel", {
+        name: product.name,
+        price: formatCurrency(product.price),
+      })}
       className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-stone-200 bg-white text-left shadow-sm transition duration-200 hover:border-violet-300 hover:shadow-md active:scale-[0.98]"
     >
       <div className="relative h-28 shrink-0 bg-slate-100 sm:h-32">

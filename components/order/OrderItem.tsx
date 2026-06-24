@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import {
   MinusIcon,
   PhotoIcon,
@@ -18,6 +19,8 @@ interface OrderItemProps {
 }
 
 export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
+  const t = useTranslations("order.item");
+
   return (
     <div className="flex items-center gap-3 py-3">
       <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-slate-100">
@@ -46,7 +49,7 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
       <div className="flex items-center gap-1.5">
         <button
           onClick={() => onUpdateQty(item.productId, item.quantity - 1)}
-          aria-label={`Decrease quantity of ${item.name}`}
+          aria-label={t("decreaseAriaLabel", { name: item.name })}
           className="flex size-6 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-slate-400 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-600"
         >
           <MinusIcon aria-hidden="true" className="size-3" />
@@ -60,7 +63,7 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
         </span>
         <button
           onClick={() => onUpdateQty(item.productId, item.quantity + 1)}
-          aria-label={`Increase quantity of ${item.name}`}
+          aria-label={t("increaseAriaLabel", { name: item.name })}
           className="flex size-6 cursor-pointer items-center justify-center rounded-full border border-violet-200 bg-violet-50 text-violet-600 transition hover:bg-violet-100"
         >
           <PlusIcon aria-hidden="true" className="size-3" />
@@ -73,7 +76,7 @@ export function OrderItem({ item, onUpdateQty, onRemove }: OrderItemProps) {
         </span>
         <button
           onClick={() => onRemove(item.productId)}
-          aria-label={`Remove ${item.name} from order`}
+          aria-label={t("removeAriaLabel", { name: item.name })}
           className="cursor-pointer rounded-full p-0.5 text-slate-300 transition hover:bg-rose-50 hover:text-rose-400"
         >
           <XMarkIcon aria-hidden="true" className="size-3.5" />

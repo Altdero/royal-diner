@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { ArchiveBoxIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { OrderType } from "@/src/types";
 import { OrderCard } from "./OrderCard";
@@ -16,7 +19,6 @@ const config = {
     titleColor: "text-amber-700",
     badgeBg: "bg-amber-400",
     emptyIcon: "text-amber-300",
-    emptyText: "No orders to prepare",
     borderColor: "border-amber-200",
   },
   ready: {
@@ -26,7 +28,6 @@ const config = {
     titleColor: "text-emerald-700",
     badgeBg: "bg-emerald-400",
     emptyIcon: "text-emerald-300",
-    emptyText: "No orders ready yet",
     borderColor: "border-emerald-200",
   },
 };
@@ -34,8 +35,10 @@ const config = {
 export { config as ordersPanelConfig };
 
 export function OrdersPanel({ title, variant, orders }: OrdersPanelProps) {
+  const t = useTranslations("orders");
   const c = config[variant];
   const Icon = c.icon;
+  const emptyText = variant === "pending" ? t("emptyPending") : t("emptyReady");
 
   return (
     <section
@@ -53,7 +56,7 @@ export function OrdersPanel({ title, variant, orders }: OrdersPanelProps) {
           {title}
         </h2>
         <span
-          aria-label={`${orders.length} orders`}
+          aria-label={t("orderCountAriaLabel", { count: orders.length })}
           className={`flex h-6 min-w-6 items-center justify-center rounded-full ${c.badgeBg} px-2 text-xs font-bold text-white`}
         >
           {orders.length}
@@ -70,7 +73,7 @@ export function OrdersPanel({ title, variant, orders }: OrdersPanelProps) {
             aria-hidden="true"
             className={`size-10 opacity-30 ${c.emptyIcon}`}
           />
-          <p className="text-sm text-stone-400">{c.emptyText}</p>
+          <p className="text-sm text-stone-400">{emptyText}</p>
         </div>
       ) : (
         <div className="flex-1 space-y-3 overflow-y-auto p-4">

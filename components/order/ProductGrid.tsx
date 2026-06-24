@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import type { ProductType } from "@/src/types";
 import { ProductCard } from "./ProductCard";
@@ -11,11 +12,13 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ products, onAdd, isLoading }: ProductGridProps) {
+  const t = useTranslations("order.grid");
+
   if (isLoading) {
     return (
       <div
         role="status"
-        aria-label="Loading products"
+        aria-label={t("loadingAriaLabel")}
         className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4"
       >
         {Array.from({ length: 8 }).map((_, i) => (
@@ -44,7 +47,7 @@ export function ProductGrid({ products, onAdd, isLoading }: ProductGridProps) {
         className="flex flex-1 flex-col items-center justify-center gap-3 py-20 text-slate-400"
       >
         <ShoppingBagIcon aria-hidden="true" className="size-12 opacity-40" />
-        <p className="text-sm">No products found.</p>
+        <p className="text-sm">{t("emptyState")}</p>
       </div>
     );
   }

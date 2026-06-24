@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { OrderType } from "@/src/types";
 
 interface OrderCardProps {
@@ -6,6 +9,8 @@ interface OrderCardProps {
 }
 
 export function OrderCard({ order, variant }: OrderCardProps) {
+  const t = useTranslations("orders");
+  const orderNum = String(order.orderNumber).padStart(3, "0");
   const accent =
     variant === "pending"
       ? "border-l-amber-400 bg-amber-50/40"
@@ -13,12 +18,15 @@ export function OrderCard({ order, variant }: OrderCardProps) {
 
   return (
     <article
-      aria-label={`Order #${String(order.orderNumber).padStart(3, "0")}, ${order.clientName}`}
+      aria-label={t("orderCardAriaLabel", {
+        orderNumber: orderNum,
+        clientName: order.clientName,
+      })}
       className={`rounded-xl border border-l-4 border-stone-200 bg-white p-4 shadow-sm ${accent}`}
     >
       <div className="mb-3 flex items-start justify-between gap-2">
         <span className="text-xs font-semibold tracking-widest text-stone-400 uppercase">
-          #{String(order.orderNumber).padStart(3, "0")}
+          #{orderNum}
         </span>
         <span className="text-right text-sm leading-tight font-bold text-stone-900">
           {order.clientName}
