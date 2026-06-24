@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-export const ORDER_STATUSES = {
-  PENDING: "PENDING",
-  READY: "READY",
-} as const;
+export { ORDER_STATUSES } from "@/src/constants/orderStatuses";
 
 export const orderStatusSchema = z.enum(["PENDING", "READY"]);
 
