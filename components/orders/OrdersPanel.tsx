@@ -1,5 +1,3 @@
-"use client";
-
 import { ArchiveBoxIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import type { OrderType } from "@/src/types";
 import { OrderCard } from "./OrderCard";
