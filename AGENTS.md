@@ -114,7 +114,7 @@ app/[locale]/                         # All routable pages live under the locale
         └── edit/
             └── page.tsx              # Edit product form
 
-middleware.ts                         # next-intl locale detection and redirect
+proxy.ts                              # next-intl locale detection and redirect
 
 messages/                             # Translation files (one per locale)
 ├── en.json
@@ -208,7 +208,7 @@ Define schemas in `src/lib/schemas/`, infer types with `z.infer<>`, re-export fr
 When a Server Component already loads a complete, bounded dataset (e.g. the product catalog), prefer in-memory `.filter()` over URL `searchParams` + Prisma re-query or a TanStack Query re-fetch. For this app the product count is small and staff-only, so filtering is instant and adds no server load. Use URL-based or TanStack search only when the dataset requires pagination or is too large to load upfront.
 
 **i18n with next-intl — locale prefix in URL**
-All routes live under `app/[locale]/`. The middleware detects the browser's `Accept-Language` header on the first visit and redirects to the matching locale prefix (e.g. `/en/orders`). Supported locales and the default (`en`) are defined in `src/i18n/routing.ts`.
+All routes live under `app/[locale]/`. The proxy (middleware) detects the browser's `Accept-Language` header on the first visit and redirects to the matching locale prefix (e.g. `/en/orders`). Supported locales and the default (`en`) are defined in `src/i18n/routing.ts`.
 
 Use `getTranslations` (async, Server Components) and `useTranslations` (hook, Client Components). Never use `next/link` or `next/navigation` directly — import `Link`, `useRouter`, `usePathname`, and `redirect` from `@/src/i18n/navigation` so they carry the active locale automatically. Call `setRequestLocale(locale)` at the top of every Server Component page to enable static rendering. Translation keys live in `messages/*.json`; all locale files must have identical keys — the `__tests__/i18n/messages.test.ts` suite enforces this.
 
