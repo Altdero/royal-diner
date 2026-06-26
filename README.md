@@ -27,6 +27,10 @@ A diner order management system built with Next.js 16, React 19, and PostgreSQL.
 - **Testing:** Jest + ts-jest
 - **Package manager:** yarn
 
+## Accessibility
+
+All pages and components meet WCAG 2.1 AA standards — semantic landmarks, keyboard navigation, screen reader support, ARIA attributes, and accessible form validation throughout.
+
 ## Setup
 
 ### 1. Install dependencies
