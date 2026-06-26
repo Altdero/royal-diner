@@ -222,6 +222,7 @@ The upload preset is hardcoded in `ImagePicker.tsx`. `ImagePicker` is imported d
 ```
 DATABASE_URL=                              # Pooled connection string — used by the app at runtime
 DIRECT_URL=                               # Direct (non-pooled) connection string — used by Prisma CLI for migrations
+NEXT_PUBLIC_APP_URL=                      # Public base URL (e.g. https://your-domain.com) — used by Swagger server definition
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=        # Safe to expose — embedded in every Cloudinary URL
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=     # Safe to expose — Cloudinary unsigned upload preset name
 ```
