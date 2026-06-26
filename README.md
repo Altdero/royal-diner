@@ -44,8 +44,9 @@ cp .env.example .env
 Fill in `.env`:
 
 ```
-DATABASE_URL=       # Pooled connection string
-DIRECT_URL=         # Direct connection string (for migrations)
+DATABASE_URL=                       # Pooled connection string
+DIRECT_URL=                         # Direct connection string (for migrations)
+NEXT_PUBLIC_APP_URL=                # Public base URL (e.g. https://your-domain.com)
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=
 ```
