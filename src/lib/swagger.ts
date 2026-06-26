@@ -8,7 +8,9 @@ const options: swaggerJsdoc.Options = {
       version: "1.0.0",
       description: "Diner order management system — REST API",
     },
-    servers: [{ url: "http://localhost:3000" }],
+    servers: [
+      { url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000" },
+    ],
     tags: [
       { name: "Categories", description: "Product categories" },
       { name: "Products", description: "Menu products" },
