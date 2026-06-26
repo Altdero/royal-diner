@@ -3,17 +3,29 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useOrders } from "@/src/hooks/useOrders";
+import type { OrderType } from "@/src/types";
 import { OrdersPanel, ordersPanelConfig } from "./OrdersPanel";
 
 const TAB_KEYS = ["pending", "ready"] as const;
 type TabKey = (typeof TAB_KEYS)[number];
 
-export function OrdersPage() {
+interface OrdersPageProps {
+  initialPendingOrders?: OrderType[];
+  initialReadyOrders?: OrderType[];
+}
+
+export function OrdersPage({
+  initialPendingOrders,
+  initialReadyOrders,
+}: OrdersPageProps) {
   const t = useTranslations("orders");
   const [activeTab, setActiveTab] = useState<TabKey>("pending");
 
-  const { data: pendingOrders = [] } = useOrders("PENDING");
-  const { data: readyOrders = [] } = useOrders("READY");
+  const { data: pendingOrders = [] } = useOrders(
+    "PENDING",
+    initialPendingOrders
+  );
+  const { data: readyOrders = [] } = useOrders("READY", initialReadyOrders);
 
   const ordersByTab: Record<TabKey, typeof pendingOrders> = {
     pending: pendingOrders,
