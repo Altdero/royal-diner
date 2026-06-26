@@ -10,10 +10,11 @@ async function fetchOrders(status?: OrderStatusType): Promise<OrderType[]> {
   return res.json();
 }
 
-export function useOrders(status?: OrderStatusType) {
+export function useOrders(status?: OrderStatusType, initialData?: OrderType[]) {
   return useQuery({
     queryKey: ["orders", status],
     queryFn: () => fetchOrders(status),
     refetchInterval: 10_000,
+    initialData,
   });
 }
