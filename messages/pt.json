@@ -51,6 +51,7 @@
     "pageTitle": "Novo Pedido",
     "pageDescription": "Crie e envie um novo pedido.",
     "sidebar": {
+      "menu": "Cardápio",
       "filterAriaLabel": "Filtrar por categoria",
       "navAriaLabel": "Navegação de categorias",
       "allCategory": "Tudo",

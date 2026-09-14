@@ -51,6 +51,7 @@
     "pageTitle": "Nueva orden",
     "pageDescription": "Crea y envía un nuevo pedido.",
     "sidebar": {
+      "menu": "Menú",
       "filterAriaLabel": "Filtrar por categoría",
       "navAriaLabel": "Navegación de categorías",
       "allCategory": "Todo",

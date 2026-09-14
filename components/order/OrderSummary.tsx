@@ -61,7 +61,7 @@ export function OrderSummary({
         {items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 text-slate-300">
             <ShoppingCartIcon aria-hidden="true" className="size-12" />
-            <p className="text-sm text-slate-400">{t("emptyCart")}</p>
+            <p className="text-sm text-slate-500">{t("emptyCart")}</p>
           </div>
         ) : (
           <div className="divide-y divide-stone-100">

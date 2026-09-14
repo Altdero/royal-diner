@@ -110,11 +110,11 @@ export function CategorySidebar({
         >
           <span
             aria-hidden={isCollapsed}
-            className={`overflow-hidden text-xs font-semibold tracking-widest whitespace-nowrap text-stone-400 uppercase transition-all duration-300 ${
+            className={`overflow-hidden text-sm font-bold tracking-widest whitespace-nowrap text-stone-900 uppercase transition-all duration-300 ${
               isCollapsed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
             }`}
           >
-            {t("allCategory")}
+            {t("menu")}
           </span>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}

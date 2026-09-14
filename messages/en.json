@@ -51,6 +51,7 @@
     "pageTitle": "New Order",
     "pageDescription": "Build and submit a new customer order.",
     "sidebar": {
+      "menu": "Menu",
       "filterAriaLabel": "Filter by category",
       "navAriaLabel": "Category navigation",
       "allCategory": "All",

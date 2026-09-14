@@ -51,6 +51,7 @@
     "pageTitle": "Nouvelle commande",
     "pageDescription": "Créez et soumettez une nouvelle commande.",
     "sidebar": {
+      "menu": "Menu",
       "filterAriaLabel": "Filtrer par catégorie",
       "navAriaLabel": "Navigation des catégories",
       "allCategory": "Tout",
