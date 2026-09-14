@@ -17,7 +17,13 @@
     "saving": "Salvando…",
     "cancel": "Cancelar",
     "delete": "Excluir",
-    "uploading": "Enviando…"
+    "uploading": "Enviando…",
+    "languages": {
+      "en": "inglês",
+      "es": "espanhol",
+      "pt": "português",
+      "fr": "francês"
+    }
   },
   "nav": {
     "ariaLabel": "Navegação principal",

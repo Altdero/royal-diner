@@ -296,12 +296,14 @@ Every page and component must meet WCAG 2.1 AA. Apply these standards without be
 
 - All interactive elements must have an accessible name: use `aria-label` for icon-only buttons/links; include the item name for repeated actions (e.g. "Delete Espresso", not just "Delete")
 - All `<input>` and `<select>` elements must have an associated `<label>` or `aria-label`; never rely on `placeholder` alone
+- Native `<option>` elements don't reliably expose `aria-label` across browsers/screen readers — give each option's own text content the accessible name you want it to have, don't rely on `aria-label` to override it
 - Use semantic HTML landmarks: `<main>`, `<nav aria-label="…">`, `<aside aria-label="…">`; do not use bare `<div>` for landmark regions
 - Communicate state programmatically: `aria-current="page"` on active nav links; `aria-pressed` or `aria-current` on toggle/filter buttons; `aria-expanded` on collapsible controls; `aria-invalid` + `aria-describedby` on form fields with errors; `aria-busy` on buttons during async operations
 - Modal dialogs require `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, `aria-describedby`, a focus trap, and Escape key dismissal
 - Dynamic content changes must be announced: use `role="status"` or `aria-live="polite"` for loading states and empty-state messages
 - Decorative SVG icons must have `aria-hidden="true"`
 - CSS-only visibility tricks (`opacity-0`, `max-w-0`) do not remove content from the accessibility tree — use `aria-hidden` or `hidden` when content must be invisible to assistive technology
+- If an element's only visible label is hidden at some breakpoint (e.g. `hidden sm:inline` on icon+text nav links) and nothing else supplies an accessible name, add an explicit `aria-label` — a responsive layout must not leave an interactive element unnamed at any viewport width
 
 **ESLint / Prettier**
 

@@ -17,7 +17,13 @@
     "saving": "Guardando…",
     "cancel": "Cancelar",
     "delete": "Eliminar",
-    "uploading": "Subiendo…"
+    "uploading": "Subiendo…",
+    "languages": {
+      "en": "inglés",
+      "es": "español",
+      "pt": "portugués",
+      "fr": "francés"
+    }
   },
   "nav": {
     "ariaLabel": "Navegación principal",

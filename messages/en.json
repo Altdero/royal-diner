@@ -17,7 +17,13 @@
     "saving": "Saving…",
     "cancel": "Cancel",
     "delete": "Delete",
-    "uploading": "Uploading…"
+    "uploading": "Uploading…",
+    "languages": {
+      "en": "english",
+      "es": "spanish",
+      "pt": "portuguese",
+      "fr": "french"
+    }
   },
   "nav": {
     "ariaLabel": "Main navigation",

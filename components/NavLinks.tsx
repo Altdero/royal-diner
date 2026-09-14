@@ -33,6 +33,7 @@ export function NavLinks() {
             <Link
               href={href}
               aria-current={isActive ? "page" : undefined}
+              aria-label={label}
               className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition duration-200 ${
                 isActive
                   ? "bg-violet-100 font-semibold text-violet-700"

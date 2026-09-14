@@ -17,7 +17,13 @@
     "saving": "Enregistrement…",
     "cancel": "Annuler",
     "delete": "Supprimer",
-    "uploading": "Téléchargement…"
+    "uploading": "Téléchargement…",
+    "languages": {
+      "en": "anglais",
+      "es": "espagnol",
+      "pt": "portugais",
+      "fr": "français"
+    }
   },
   "nav": {
     "ariaLabel": "Navigation principale",
