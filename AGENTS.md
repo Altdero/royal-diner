@@ -65,7 +65,7 @@ The kitchen display. Shows one card per order that has status `PENDING`. Each ca
 - **Forms:** react-hook-form + @hookform/resolvers + Zod v4
 - **State:** Zustand v5
 - **i18n:** next-intl v4 (locales: en, es, pt, fr; default: en; locale prefix in URL)
-- **Images:** next-cloudinary (CldUploadWidget, preset hardcoded) + public assets (fallbacks)
+- **Images:** Cloudinary unsigned upload via direct `fetch` (preset hardcoded) + public assets (fallbacks)
 - **UI feedback:** sonner
 - **Icons:** @heroicons/react
 - **API docs:** swagger-jsdoc + swagger-ui-react (served at `/docs`)
@@ -213,9 +213,9 @@ All routes live under `app/[locale]/`. The proxy (middleware) detects the browse
 Use `getTranslations` (async, Server Components) and `useTranslations` (hook, Client Components). Never use `next/link` or `next/navigation` directly — import `Link`, `useRouter`, `usePathname`, and `redirect` from `@/src/i18n/navigation` so they carry the active locale automatically. Call `setRequestLocale(locale)` at the top of every Server Component page to enable static rendering. Translation keys live in `messages/*.json`; all locale files must have identical keys — the `__tests__/i18n/messages.test.ts` suite enforces this.
 
 **Cloudinary for uploaded images, public/ for fallbacks**
-Product images are uploaded by the user via next-cloudinary (CldUploadWidget). Images in `public/products/` are default fallbacks rendered by `getImagePath` when a product has no Cloudinary URL — they are not selectable from the UI. Category icons or decoration images are static files in `public/`.
+Product images are uploaded by the user via a plain `<input type="file">` in `ImagePicker.tsx`; `ProductForm.tsx` sends the selected file straight to Cloudinary's unsigned upload endpoint with a direct `fetch` call and stores the returned `secure_url`. Images in `public/products/` are default fallbacks rendered by `getImagePath` when a product has no Cloudinary URL — they are not selectable from the UI. Category icons or decoration images are static files in `public/`.
 
-The upload preset is hardcoded in `ImagePicker.tsx`. `ImagePicker` is imported directly (no dynamic import needed).
+The upload preset is hardcoded in `ProductForm.tsx` (inside `uploadToCloudinary`).
 
 ## Environment Variables
 

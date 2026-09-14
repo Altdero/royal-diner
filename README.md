@@ -22,7 +22,7 @@ A diner order management system built with Next.js 16, React 19, and PostgreSQL.
 - **Forms:** react-hook-form + Zod v4
 - **State:** Zustand v5
 - **i18n:** next-intl v4 (en, es, pt, fr)
-- **Images:** next-cloudinary + public assets
+- **Images:** Cloudinary unsigned upload via direct `fetch` + public assets
 - **API docs:** swagger-jsdoc + swagger-ui-react
 - **Testing:** Jest + ts-jest
 - **Package manager:** yarn
