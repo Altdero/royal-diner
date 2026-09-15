@@ -140,7 +140,6 @@ src/
 │   └── orderStatuses.ts              # ORDER_STATUSES constant
 ├── hooks/                            # Custom React hooks
 │   ├── useCategories.ts
-│   ├── useProducts.ts
 │   ├── useOrders.ts
 │   ├── useProductMutations.ts
 │   └── useOrderMutations.ts
@@ -178,7 +177,7 @@ public/
 | Thing      | Convention                    | Example              |
 | ---------- | ----------------------------- | -------------------- |
 | Components | PascalCase                    | `ProductCard.tsx`    |
-| Hooks      | camelCase prefixed `use`      | `useProducts.ts`     |
+| Hooks      | camelCase prefixed `use`      | `useOrders.ts`       |
 | Providers  | camelCase + `Provider` suffix | `query.provider.tsx` |
 | Schemas    | camelCase + `Schema` suffix   | `productSchema.ts`   |
 | Stores     | camelCase + `Store` suffix    | `orderStore.ts`      |
@@ -254,7 +253,7 @@ yarn prepare      # Set up Husky git hooks
 **TypeScript**
 
 - Strict mode enabled
-- Path alias `@/*` maps to the project root. Files inside `src/` are imported with the `@/src/` prefix (e.g. `@/src/lib/prisma`, `@/src/hooks/useProducts`). Files inside `app/` use `@/app/` as usual.
+- Path alias `@/*` maps to the project root. Files inside `src/` are imported with the `@/src/` prefix (e.g. `@/src/lib/prisma`, `@/src/hooks/useOrders`). Files inside `app/` use `@/app/` as usual.
 - `.tsx` for files with JSX, `.ts` for logic-only files
 - Import types with `import type` when the import is type-only
 - Derive union types from constant objects with `keyof typeof`

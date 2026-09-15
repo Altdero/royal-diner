@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { OrderPage } from "@/components/order/OrderPage";
+import { prisma } from "@/src/lib/prisma";
 
 export async function generateMetadata({
   params,
@@ -19,5 +20,18 @@ export default async function OrderRoute({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <OrderPage />;
+
+  const products = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      image: true,
+      categoryId: true,
+      category: { select: { id: true, name: true } },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return <OrderPage products={products} />;
 }

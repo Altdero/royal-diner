@@ -10,9 +10,10 @@ import { getImagePath } from "@/src/lib/utils/getImagePath";
 interface ProductCardProps {
   product: ProductType;
   onAdd: (product: ProductType) => void;
+  preload: boolean;
 }
 
-export function ProductCard({ product, onAdd }: ProductCardProps) {
+export function ProductCard({ product, onAdd, preload }: ProductCardProps) {
   const t = useTranslations("order.card");
 
   return (
@@ -30,8 +31,9 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
             src={getImagePath(product.image)!}
             alt={product.name}
             fill
-            sizes="auto"
+            sizes="(max-width: 639px) calc(50vw - 22px), (max-width: 1023px) calc(33.33vw - 18.67px), (max-width: 1279px) calc(33.33vw - 194.67px), 171px"
             loading="eager"
+            fetchPriority={preload ? "high" : "low"}
             className="object-cover transition duration-200 group-hover:scale-105"
           />
         ) : (

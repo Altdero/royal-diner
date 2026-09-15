@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { useCategories } from "@/src/hooks/useCategories";
 import { useCreateOrder } from "@/src/hooks/useOrderMutations";
-import { useProducts } from "@/src/hooks/useProducts";
 import { useOrderStore } from "@/src/store/orderStore";
 import { CategorySidebar } from "./CategorySidebar";
 import { OrderSummary } from "./OrderSummary";
 import { ProductGrid } from "./ProductGrid";
 import { ProductSearch } from "./ProductSearch";
+import { ProductType } from "@/src/types";
+import { filteredProductsByCategory } from "@/src/lib/utils/filterProducts";
 
-export function OrderPage() {
+interface OrderPageProps {
+  products: ProductType[];
+}
+
+export function OrderPage({ products }: OrderPageProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -20,11 +25,13 @@ export function OrderPage() {
     return () => clearTimeout(id);
   }, [search]);
 
+  const filtered = filteredProductsByCategory(
+    products,
+    debouncedSearch,
+    activeCategory
+  );
+
   const { data: categories = [] } = useCategories();
-  const { data: products = [], isLoading: productsLoading } = useProducts({
-    categoryId: activeCategory ?? undefined,
-    search: debouncedSearch,
-  });
 
   const {
     clientName,
@@ -68,11 +75,7 @@ export function OrderPage() {
       />
       <main className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
         <ProductSearch search={search} onSearch={setSearch} />
-        <ProductGrid
-          products={products}
-          isLoading={productsLoading}
-          onAdd={addItem}
-        />
+        <ProductGrid products={filtered} isLoading={false} onAdd={addItem} />
       </main>
       <OrderSummary
         clientName={clientName}

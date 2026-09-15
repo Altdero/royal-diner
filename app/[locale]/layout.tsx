@@ -8,6 +8,7 @@ import {
 } from "next-intl/server";
 import { Toaster } from "sonner";
 import "@/app/globals.css";
+import { CloudinaryPreconnect } from "@/components/CloudinaryPreconnect";
 import { Nav } from "@/components/Nav";
 import { QueryProvider } from "@/src/providers/query.provider";
 import { routing } from "@/src/i18n/routing";
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
       <body className="mx-auto flex h-full w-full max-w-7xl flex-col bg-slate-100">
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
+            <CloudinaryPreconnect />
             <a
               href="#main-content"
               className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:rounded-lg focus:bg-violet-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
